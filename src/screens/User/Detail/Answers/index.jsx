@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import Answer from "../../../../Components/Answer";
+import LineSeparator from "../../../../Components/LineSeparator";
 import { useParams } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
-import answerQuery from "../../../../GraphQl/answer/query";
-import LineSeparator from "../../../../Components/LineSeparator";
+import answerQuery from "../../../../GraphQL/answer/query";
 
 const UserAnswers = () => {
     const { username } = useParams();

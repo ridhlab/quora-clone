@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Box, Container, Flex, Text } from "@chakra-ui/react";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import Layout from "../../../Components/Layout";
-import { useLazyQuery } from "@apollo/client";
-
-import userQuery from "../../../GraphQl/user/query";
 import Card from "../../../Components/Card";
 import Tab from "../../../Components/Tab";
+
+import { useLazyQuery } from "@apollo/client";
+import userQuery from "../../../GraphQL/user/query";
 
 const User = () => {
     const { username } = useParams();

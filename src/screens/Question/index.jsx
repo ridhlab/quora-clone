@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import { Box, Button, Container, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Card from "../../Components/Card";
 import Layout from "../../Components/Layout";
-import questionQuery from "../../GraphQl/question/query";
-import { useLazyQuery } from "@apollo/client";
-import { Link } from "react-router-dom";
-import AnswerButton from "../../Components/AnswerButton";
 import Question from "../../Components/Question";
+import questionQuery from "../../GraphQL/question/query";
+import { useLazyQuery } from "@apollo/client";
 
 const QuestionScreen = () => {
     const { GET_QUESTIONS } = questionQuery;

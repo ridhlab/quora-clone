@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 
 import { useLazyQuery } from "@apollo/client";
-import questionQuery from "../../../../GraphQl/question/query";
+import questionQuery from "../../../../GraphQL/question/query";
 import Question from "../../../../Components/Question";
 import LineSeparator from "../../../../Components/LineSeparator";
 

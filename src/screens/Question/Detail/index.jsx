@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
-import { useLocation, useParams } from "react-router-dom";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import Answer from "../../../Components/Answer";
 import AnswerButton from "../../../Components/AnswerButton";
 import Card from "../../../Components/Card";
 import Layout from "../../../Components/Layout";
 
 import { useLazyQuery } from "@apollo/client";
-import answerQuery from "../../../GraphQl/answer/query";
-import questionQuery from "../../../GraphQl/question/query";
+import answerQuery from "../../../GraphQL/answer/query";
+import questionQuery from "../../../GraphQL/question/query";
 import LineSeparator from "../../../Components/LineSeparator";
 
 const QuestionDetail = () => {

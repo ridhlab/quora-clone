@@ -13,7 +13,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme/config";
 
 import { ApolloProvider } from "@apollo/client";
-import client from "./GraphQl/config";
+import client from "./GraphQL/config";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

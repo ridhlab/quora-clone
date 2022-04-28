@@ -6,9 +6,9 @@ import Answer from "../../Components/Answer";
 import Card from "../../Components/Card";
 import Layout from "../../Components/Layout";
 
-import answerQuery from "../../GraphQl/answer/query";
-import questionQuery from "../../GraphQl/question/query";
-import spaceQuery from "../../GraphQl/space/query";
+import answerQuery from "../../GraphQL/answer/query";
+import questionQuery from "../../GraphQL/question/query";
+import spaceQuery from "../../GraphQL/space/query";
 
 const Home = () => {
     const { GET_ANSWERS } = answerQuery;

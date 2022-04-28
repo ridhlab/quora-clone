@@ -21,10 +21,6 @@ const spaceQuery = {
                 questions {
                     id
                     question
-                    answers {
-                        id
-                        answer
-                    }
                 }
                 answers {
                     id
