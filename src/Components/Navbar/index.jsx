@@ -15,7 +15,9 @@ const Navbar = () => {
         <Box bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)" py={2} position="sticky" top={0} zIndex={99}>
             <Container maxW={1000} display={{ base: "block", sm: "flex" }} justifyContent="space-between" margin="auto">
                 <Flex alignItems="center">
-                    <Logo />
+                    <Link to="/">
+                        <Logo />
+                    </Link>
                 </Flex>
                 <UnorderedList display="flex" m={0} justifyContent={{ base: "space-between", sm: "flex-start" }} my={{ base: 4, sm: 0 }}>
                     <NavItem path="/" icon={<HomeIcon color={pathname === "/" ? "#2FD2DC" : "black"} />} />

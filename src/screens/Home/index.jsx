@@ -1,7 +1,7 @@
 import { useLazyQuery } from "@apollo/client";
 import { Box, Container, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Answer from "../../Components/Answer";
 import Card from "../../Components/Card";
 import Layout from "../../Components/Layout";
@@ -18,6 +18,16 @@ const Home = () => {
     const [getAnswers, { data: answers, error: errorAnswers, loading: loadingAnswers }] = useLazyQuery(GET_ANSWERS);
     const [getQuestions, { data: questions, error: errorQuestions, loading: loadingQuestions }] = useLazyQuery(GET_QUESTIONS);
     const [getSpaces, { data: spaces, error: errorSpaces, loading: loadingSpaces }] = useLazyQuery(GET_SPACES);
+
+    const location = useLocation();
+
+    if (localStorage.getItem("userToken")) {
+        console.log(location);
+        console.log("key exist");
+    } else {
+        console.log(location);
+        console.log("key not exist");
+    }
 
     useEffect(() => {
         getAnswers();

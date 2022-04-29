@@ -21,6 +21,14 @@ const userQuery = {
             }
         }
     `,
+    GET_USER_FOR_AUTH: gql`
+        query getUserForAuth($username: String!) {
+            users(where: { username: { _eq: $username } }) {
+                username
+                password
+            }
+        }
+    `,
 };
 
 export default userQuery;

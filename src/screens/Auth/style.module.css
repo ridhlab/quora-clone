@@ -17,3 +17,17 @@
 .link{
     color:#2FD2DC
 }
+
+.link:hover{
+    color:#14BCC7
+}
+
+.eyeIcon{
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+}
+
+.eyeIcon:hover{
+    cursor: pointer;
+}
