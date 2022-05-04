@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Answer from "../../../Components/Answer";
-import AnswerButton from "../../../Components/AnswerButton";
+import ButtonWithIcon from "../../../Components/ButtonWithIcon";
 import Card from "../../../Components/Card";
 import Layout from "../../../Components/Layout";
 
@@ -45,7 +45,7 @@ const QuestionDetail = () => {
                     {!loadingQuestion && typeof question !== "undefined" && (
                         <>
                             <Flex my={2}>
-                                <AnswerButton />
+                                <ButtonWithIcon text="Jawab" />
                             </Flex>
                             <hr />
                             <hr />

@@ -1,6 +1,7 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import AnswerButton from "../AnswerButton";
+import { BiEdit } from "react-icons/bi";
+import ButtonWithIcon from "../ButtonWithIcon";
 
 const Question = ({ answerCount, questionId, question }) => {
     return (
@@ -14,7 +15,7 @@ const Question = ({ answerCount, questionId, question }) => {
                 {answerCount} jawaban
             </Text>
             <Flex>
-                <AnswerButton />
+                <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
             </Flex>
         </>
     );

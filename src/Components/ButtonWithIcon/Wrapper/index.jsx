@@ -1,7 +1,6 @@
-import { Button, Text } from "@chakra-ui/react";
-import { BiEditAlt } from "react-icons/bi";
+import { Button } from "@chakra-ui/react";
 
-const AnswerButton = () => {
+const WrapperBtnWithIcon = ({ children }) => {
     return (
         <Button
             display="flex"
@@ -12,10 +11,9 @@ const AnswerButton = () => {
             _hover={{ bgColor: "#F8F8F8", color: "primary.index" }}
             _active={{ bgColor: "gray.100" }}
         >
-            <BiEditAlt />
-            <Text fontSize={13}>Jawab</Text>
+            {children}
         </Button>
     );
 };
 
-export default AnswerButton;
+export default WrapperBtnWithIcon;

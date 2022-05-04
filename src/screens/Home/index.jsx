@@ -6,34 +6,35 @@ import Answer from "../../Components/Answer";
 import Card from "../../Components/Card";
 import Layout from "../../Components/Layout";
 
+import { useSelector, useDispatch } from "react-redux";
+import { SET_LOADING_AUTH_FALSE, SET_LOADING_AUTH_TRUE, SET_LOGIN_TRUE } from "../../store/auth/action";
+
 import answerQuery from "../../GraphQL/answer/query";
 import questionQuery from "../../GraphQL/question/query";
 import spaceQuery from "../../GraphQL/space/query";
+import userQuery from "../../GraphQL/user/query";
+
+import useTokenValid from "../../hooks/useTokenValid";
 
 const Home = () => {
+    const dispatch = useDispatch();
+
+    const { isLogin, username: usernameStore, isLoadingAuth } = useSelector((state) => state.authReducer);
+
     const { GET_ANSWERS } = answerQuery;
     const { GET_QUESTIONS } = questionQuery;
     const { GET_SPACES } = spaceQuery;
+    const { GET_USER_FOR_AUTH } = userQuery;
+
+    const { checkTokenValid, isTokenValid } = useTokenValid();
 
     const [getAnswers, { data: answers, error: errorAnswers, loading: loadingAnswers }] = useLazyQuery(GET_ANSWERS);
     const [getQuestions, { data: questions, error: errorQuestions, loading: loadingQuestions }] = useLazyQuery(GET_QUESTIONS);
     const [getSpaces, { data: spaces, error: errorSpaces, loading: loadingSpaces }] = useLazyQuery(GET_SPACES);
 
-    const location = useLocation();
-
-    if (localStorage.getItem("userToken")) {
-        console.log(location);
-        console.log("key exist");
-    } else {
-        console.log(location);
-        console.log("key not exist");
-    }
-
     useEffect(() => {
-        getAnswers();
-        getQuestions();
-        getSpaces();
-    }, []);
+        console.log("isTokenValid", isTokenValid);
+    }, [isTokenValid]);
 
     useEffect(() => {
         console.log(answers);
@@ -46,6 +47,16 @@ const Home = () => {
     useEffect(() => {
         console.log(spaces);
     }, [spaces]);
+
+    useEffect(() => {
+        console.log(isLogin, usernameStore, isLoadingAuth);
+    }, [isLogin, usernameStore, isLoadingAuth]);
+
+    useEffect(() => {
+        getAnswers();
+        getQuestions();
+        getSpaces();
+    }, []);
 
     return (
         <Layout>

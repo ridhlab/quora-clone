@@ -6,6 +6,7 @@ import Logo from "../../../Components/Logo";
 import { Link, useNavigate } from "react-router-dom";
 import WrapperAuth from "../../../Components/WrapperAuth";
 import bcrypt from "bcryptjs";
+import CryptoJS from "crypto-js";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import userQuery from "../../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
@@ -28,24 +29,29 @@ const Login = () => {
 
     const { GET_USER_FOR_AUTH } = userQuery;
 
-    const [getUserForAuth, { data: users, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH);
+    const [getUserForAuth, { data: users, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH, {
+        onCompleted: (data) => {
+            const { users: usersData } = data;
+            checkAuthValid(usersData);
+        },
+    });
 
-    const checkisPasswordExact = async () => {
-        const isPasswordExact = await bcrypt.compare(value.password, users?.users[0].password);
+    const checkisPasswordExact = async (passwInput, passwDb) => {
+        const isPasswordExact = await bcrypt.compare(passwInput, passwDb);
         return isPasswordExact;
     };
 
-    const checkAuthValid = async () => {
-        if (users.users.length === 1) {
-            const isPasswordExact = await checkisPasswordExact();
+    const checkAuthValid = async (data) => {
+        if (data.length === 1) {
+            const isPasswordExact = await checkisPasswordExact(value.password, data[0].password);
             if (isPasswordExact) {
-                navigate("/", { state: { username: users.users[0].username } });
-                setAuth(bcrypt.hashSync(users.users[0].username, bcrypt.genSaltSync(10)));
+                navigate("/");
+                setAuth(btoa(data[0].username));
             } else {
                 setIsPasswordValid(false);
             }
         } else {
-            if (users.users.length === 0) {
+            if (data.length === 0) {
                 setIsUsernameExist(false);
             }
         }
@@ -56,7 +62,7 @@ const Login = () => {
         console.log("kesini");
         console.log(users);
         if (value.username === users?.users[0]?.username) {
-            checkAuthValid();
+            checkAuthValid(users.users);
         }
         getUserForAuth({
             variables: {
@@ -66,18 +72,12 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if (typeof users !== "undefined") {
-            checkAuthValid();
-        }
-    }, [users]);
-
-    useEffect(() => {
         if (!isUsernameExist) {
             setTimeout(() => {
                 setIsUsernameExist(true);
             }, 1500);
         }
-    }, [isUsernameExist, isPasswordValid]);
+    }, [isUsernameExist]);
 
     useEffect(() => {
         if (!isPasswordValid) {
@@ -90,6 +90,16 @@ const Login = () => {
     useEffect(() => {
         console.log(users, loading, error);
     }, [users, loading, error]);
+
+    // useEffect(() => {
+    //     const encrypt = CryptoJS.AES.encrypt("dharidwan", "6d090796-ecdf-11ea-adc1-0242ac112345");
+    //     const decrypt = CryptoJS.AES.decrypt(encrypt, "6d090796-ecdf-11ea-adc1-0242ac112345'");
+    //     console.log(encrypt.toString());
+    //     console.log(decrypt.toString());
+    //     const base64enc = btoa("dharidwan");
+    //     const base64dec = atob(base64enc);
+    //     console.log(base64dec, base64enc);
+    // }, []);
 
     return (
         <WrapperAuth>

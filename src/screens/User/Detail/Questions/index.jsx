@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 
 import { useLazyQuery } from "@apollo/client";
 import questionQuery from "../../../../GraphQL/question/query";
@@ -28,6 +28,13 @@ const UserQuestions = () => {
 
     return (
         <Box>
+            {questions?.questions.length === 0 && (
+                <Box py={4}>
+                    <Text fontSize={13} textAlign="center">
+                        Belum ada pertanyaan
+                    </Text>
+                </Box>
+            )}
             {questions?.questions.map((question, idx) => {
                 const { answers, id } = question;
                 return (

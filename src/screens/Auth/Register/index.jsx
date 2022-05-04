@@ -11,6 +11,7 @@ import userQuery from "../../../GraphQL/user/query";
 import userMutation from "../../../GraphQL/user/mutation";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { setAuth } from "../../../auth/auth";
+import useUsernameExist from "../../../hooks/useUsernameExist";
 
 const Register = () => {
     const [value, setValue] = useState({
@@ -30,23 +31,21 @@ const Register = () => {
 
     const [showErrorPrompt, setShowErrorPrompt] = useState(false);
 
-    const [isUsernameExist, setIsUsernameExist] = useState(false);
-
     const navigate = useNavigate();
 
-    const { GET_USER_FOR_AUTH } = userQuery;
+    const { checkUsernameExist, isUsernameExist: isUsernameExistHooks } = useUsernameExist();
+
+    const [isUsernameExist, setIsUsernameExist] = useState(isUsernameExistHooks);
 
     const { ADD_USER } = userMutation;
-
-    const [getUserForAuth, { data: users, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH);
 
     const salt = bcrypt.genSaltSync(10);
 
     const [addUser] = useMutation(ADD_USER, {
         onCompleted: (data) => {
             const { username } = data.insert_users_one;
-            setAuth(bcrypt.hashSync(username, salt));
-            navigate("/", { state: { username } });
+            setAuth(btoa(username));
+            navigate("/");
         },
     });
 
@@ -81,12 +80,33 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isNameValid && isUsernameValid && isPasswordMatch) {
-            getUserForAuth({ variables: { username: usernameValue } });
+            // getUserForAuth({ variables: { username: usernameValue } }); //replace with hooks
+            checkUsernameExist(usernameValue);
         } else {
             setShowErrorPrompt(true);
         }
         console.log(isNameValid, isUsernameValid, isPasswordMatch);
     };
+
+    useEffect(() => {
+        console.log("isUsernameExistHooks", isUsernameExistHooks);
+        if (isUsernameExistHooks) {
+            setIsUsernameExist(true);
+        } else {
+            console.log("kesini woy");
+            if (
+                isNameValid &&
+                isUsernameValid &&
+                isPasswordMatch &&
+                nameValue !== "" &&
+                usernameValue !== "" &&
+                passwordValue !== "" &&
+                confirmPasswordValue !== ""
+            ) {
+                registerSuccess();
+            }
+        }
+    }, [isUsernameExistHooks]);
 
     useEffect(() => {
         if (nameValue !== "") {
@@ -127,16 +147,16 @@ const Register = () => {
         }
     }, [isUsernameExist]);
 
-    useEffect(() => {
-        if (typeof users !== "undefined") {
-            if (users.users.length === 0) {
-                console.log("kesini");
-                registerSuccess();
-            } else {
-                setIsUsernameExist(true);
-            }
-        }
-    }, [users, loading, error]);
+    // useEffect(() => {
+    //     if (typeof users !== "undefined") {
+    //         if (users.users.length === 0) {
+    //             console.log("kesini");
+    //             registerSuccess();
+    //         } else {
+    //             setIsUsernameExist(true);
+    //         }
+    //     }
+    // }, [users, loading, error]);
 
     return (
         <WrapperAuth>
