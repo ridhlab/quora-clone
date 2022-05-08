@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
-import questionQuery from "../../../../GraphQl/question/query";
+import questionQuery from "../../../../GraphQL/question/query";
 import Question from "../../../../Components/Question";
 import LineSeparator from "../../../../Components/LineSeparator";
 
@@ -29,11 +29,11 @@ const SpaceQuestions = () => {
     return (
         <Box>
             {questions?.questions.map((question, idx) => {
-                const { id, answers } = question;
+                const { id, answers, space_id } = question;
                 return (
                     <React.Fragment key={id}>
                         <Box my={4}>
-                            <Question questionId={id} question={question.question} answerCount={answers.length} />
+                            <Question questionId={id} question={question.question} answerCount={answers.length} spaceId={space_id} />
                         </Box>
                         {idx !== questions.questions.length - 1 && <LineSeparator />}
                     </React.Fragment>

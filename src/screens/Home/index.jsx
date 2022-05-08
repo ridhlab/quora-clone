@@ -1,29 +1,88 @@
-import { useLazyQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { Box, Container, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { Link, useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 import Answer from "../../Components/Answer";
 import Card from "../../Components/Card";
 import Layout from "../../Components/Layout";
 
-import answerQuery from "../../GraphQl/answer/query";
-import questionQuery from "../../GraphQl/question/query";
-import spaceQuery from "../../GraphQl/space/query";
+import { useSelector, useDispatch } from "react-redux";
+import { SET_LOADING_AUTH_FALSE, SET_LOADING_AUTH_TRUE, SET_LOGIN_TRUE } from "../../store/auth/action";
+
+import answerQuery from "../../GraphQL/answer/query";
+import questionQuery from "../../GraphQL/question/query";
+import spaceQuery from "../../GraphQL/space/query";
+import userQuery from "../../GraphQL/user/query";
+import questionMutation from "../../GraphQL/question/mutation";
+
+import useTokenValid from "../../hooks/useTokenValid";
+import QuestionForm from "../../Components/QuestionForm";
 
 const Home = () => {
+    const dispatch = useDispatch();
+
+    const { isLogin, username: usernameStore, isLoadingAuth } = useSelector((state) => state.authReducer);
+
+    const [user, setUser] = useState({});
     const { GET_ANSWERS } = answerQuery;
     const { GET_QUESTIONS } = questionQuery;
     const { GET_SPACES } = spaceQuery;
+    const { GET_USER_FOR_AUTH, GET_USER_BY_USERNAME } = userQuery;
+    const { ADD_QUESTION_WITHOUT_SPACE, ADD_QUESTION_WITH_SPACE } = questionMutation;
+
+    const { checkTokenValid, isTokenValid } = useTokenValid();
 
     const [getAnswers, { data: answers, error: errorAnswers, loading: loadingAnswers }] = useLazyQuery(GET_ANSWERS);
     const [getQuestions, { data: questions, error: errorQuestions, loading: loadingQuestions }] = useLazyQuery(GET_QUESTIONS);
     const [getSpaces, { data: spaces, error: errorSpaces, loading: loadingSpaces }] = useLazyQuery(GET_SPACES);
+    const [getUserBuysername, { data: users, loading: loadingUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
+        onCompleted: (data) => {
+            setUser(data.users);
+        },
+    });
+
+    const [addQuestionWithoutSpace] = useMutation(ADD_QUESTION_WITHOUT_SPACE, {
+        onCompleted: (data) => {
+            showAlertSuccessQuestion();
+            console.log(data);
+        },
+    });
+
+    const [addQuestionWithSpace] = useMutation(ADD_QUESTION_WITH_SPACE, {
+        onCompleted: (data) => {
+            showAlertSuccessQuestion();
+            console.log(data);
+        },
+    });
+
+    const showAlertSuccessQuestion = () => {
+        Swal.fire("Selamat", "Pertanyaan Berhasil Ditambahkan", "success");
+    };
+
+    const handleSubmitQuestion = (question, spaceId, userId) => {
+        if (spaceId === "Publik") {
+            console.log(question, spaceId, userId);
+            addQuestionWithoutSpace({
+                variables: {
+                    question,
+                    user_id: userId,
+                },
+            });
+        } else {
+            addQuestionWithSpace({
+                variables: {
+                    question,
+                    user_id: userId,
+                    space_id: spaceId,
+                },
+            });
+        }
+    };
 
     useEffect(() => {
-        getAnswers();
-        getQuestions();
-        getSpaces();
-    }, []);
+        console.log("isTokenValid", isTokenValid);
+    }, [isTokenValid]);
 
     useEffect(() => {
         console.log(answers);
@@ -36,6 +95,30 @@ const Home = () => {
     useEffect(() => {
         console.log(spaces);
     }, [spaces]);
+
+    useEffect(() => {
+        console.log(isLogin, usernameStore, isLoadingAuth);
+    }, [isLogin, usernameStore, isLoadingAuth]);
+
+    useEffect(() => {
+        if (usernameStore !== "") {
+            getUserBuysername({
+                variables: {
+                    username: usernameStore,
+                },
+            });
+        }
+    }, [usernameStore]);
+
+    useEffect(() => {
+        getAnswers();
+        getQuestions();
+        getSpaces();
+    }, []);
+
+    console.log(isLogin, usernameStore);
+
+    console.log(loadingUser, users);
 
     return (
         <Layout>
@@ -69,13 +152,27 @@ const Home = () => {
                     )}
                 </Box>
                 <Box maxWidth={500}>
+                    {user.length > 0 && isLogin && (
+                        <Card>
+                            <QuestionForm
+                                userId={user[0].id}
+                                username={user[0].username}
+                                profilePicture={user[0].profile_picture}
+                                spaces={spaces}
+                                handleClick={handleSubmitQuestion}
+                            />
+                        </Card>
+                    )}
+
                     {answers?.answers.map((answer, idx) => {
-                        const { upvote_count, downvote_count } = answer;
-                        const { profile_picture, username, name } = answer.user;
+                        const { upvote_count, downvote_count, id } = answer;
+                        const { profile_picture, username, name, id: userId } = answer.user;
                         const { question, id: questionId } = answer.question;
                         return (
                             <Card key={answer.id}>
                                 <Answer
+                                    answerId={id}
+                                    userId={userId}
                                     questionId={questionId}
                                     profilePicture={profile_picture}
                                     username={username}

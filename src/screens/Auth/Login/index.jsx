@@ -1,0 +1,163 @@
+import styles from "../style.module.css";
+import { useEffect, useState } from "react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import Card from "../../../Components/Card";
+import Logo from "../../../Components/Logo";
+import { Link, useNavigate } from "react-router-dom";
+import WrapperAuth from "../../../Components/WrapperAuth";
+import bcrypt from "bcryptjs";
+import CryptoJS from "crypto-js";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import userQuery from "../../../GraphQL/user/query";
+import { useLazyQuery } from "@apollo/client";
+import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
+import { setAuth } from "../../../auth/auth";
+
+const Login = () => {
+    const [passVisibility, setPassVisibility] = useState(false);
+
+    const [value, setValue] = useState({
+        username: "",
+        password: "",
+    });
+
+    const [isUsernameExist, setIsUsernameExist] = useState(true);
+
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
+
+    const navigate = useNavigate();
+
+    const { GET_USER_FOR_AUTH } = userQuery;
+
+    const [getUserForAuth, { data: users, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH, {
+        onCompleted: (data) => {
+            const { users: usersData } = data;
+            checkAuthValid(usersData);
+        },
+    });
+
+    const checkisPasswordExact = async (passwInput, passwDb) => {
+        const isPasswordExact = await bcrypt.compare(passwInput, passwDb);
+        return isPasswordExact;
+    };
+
+    const checkAuthValid = async (data) => {
+        if (data.length === 1) {
+            const isPasswordExact = await checkisPasswordExact(value.password, data[0].password);
+            if (isPasswordExact) {
+                navigate("/");
+                setAuth(btoa(data[0].username));
+            } else {
+                setIsPasswordValid(false);
+            }
+        } else {
+            if (data.length === 0) {
+                setIsUsernameExist(false);
+            }
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("kesini");
+        console.log(users);
+        if (value.username === users?.users[0]?.username) {
+            checkAuthValid(users.users);
+        }
+        getUserForAuth({
+            variables: {
+                username: value.username,
+            },
+        });
+    };
+
+    useEffect(() => {
+        if (!isUsernameExist) {
+            setTimeout(() => {
+                setIsUsernameExist(true);
+            }, 1500);
+        }
+    }, [isUsernameExist]);
+
+    useEffect(() => {
+        if (!isPasswordValid) {
+            setTimeout(() => {
+                setIsPasswordValid(true);
+            }, 1500);
+        }
+    }, [isPasswordValid]);
+
+    useEffect(() => {
+        console.log(users, loading, error);
+    }, [users, loading, error]);
+
+    // useEffect(() => {
+    //     const encrypt = CryptoJS.AES.encrypt("dharidwan", "6d090796-ecdf-11ea-adc1-0242ac112345");
+    //     const decrypt = CryptoJS.AES.decrypt(encrypt, "6d090796-ecdf-11ea-adc1-0242ac112345'");
+    //     console.log(encrypt.toString());
+    //     console.log(decrypt.toString());
+    //     const base64enc = btoa("dharidwan");
+    //     const base64dec = atob(base64enc);
+    //     console.log(base64dec, base64enc);
+    // }, []);
+
+    return (
+        <WrapperAuth>
+            <Card>
+                <Flex justifyContent="center" mb={2}>
+                    <Link to="/">
+                        <Logo />
+                    </Link>
+                </Flex>
+                <Box>
+                    <hr />
+                    <hr />
+                </Box>
+                <form className={styles.formWrapper} onSubmit={handleSubmit}>
+                    <Box my={2}>
+                        <label className={styles.label}>Username</label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            autoComplete="off"
+                            value={value.username}
+                            onChange={(e) => setValue({ ...value, username: e.target.value })}
+                            required
+                        />
+                    </Box>
+                    <Box my={2}>
+                        <label className={styles.label}>Password</label>
+                        <Box position="relative">
+                            <input
+                                type={passVisibility ? "text" : "password"}
+                                className={styles.input}
+                                value={value.password}
+                                onChange={(e) => setValue({ ...value, password: e.target.value })}
+                                required
+                            />
+                            {passVisibility ? (
+                                <AiFillEyeInvisible className={styles.eyeIcon} color="#AAA" onClick={() => setPassVisibility(false)} />
+                            ) : (
+                                <AiFillEye className={styles.eyeIcon} color="#DDD" onClick={() => setPassVisibility(true)} />
+                            )}
+                        </Box>
+                    </Box>
+                    {!isUsernameExist && <ErrorMessageWithCard message="Username yang anda masukkan tidak tersedia" />}
+                    {!isPasswordValid && <ErrorMessageWithCard message="Password yang anda masukkan salah" />}
+
+                    <Button type="submit" w="100%" mt={2} bgColor="primary.index" color="white" _hover={{ bgColor: "primary.hover" }}>
+                        Login
+                    </Button>
+                </form>
+                <Text fontSize={13} color="gray.500">
+                    Belum punya akun?{" "}
+                    <Link to="/register" className={styles.link}>
+                        Daftar
+                    </Link>
+                </Text>
+            </Card>
+        </WrapperAuth>
+    );
+};
+
+export default Login;

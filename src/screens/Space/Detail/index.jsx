@@ -5,7 +5,7 @@ import Layout from "../../../Components/Layout";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
-import spaceQuery from "../../../GraphQl/space/query";
+import spaceQuery from "../../../GraphQL/space/query";
 import Tab from "../../../Components/Tab";
 
 const SpaceDetail = () => {

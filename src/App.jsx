@@ -10,6 +10,8 @@ import QuestionScreen from "./screens/Question";
 import SpaceDetail from "./screens/Space/Detail";
 import SpaceAnswers from "./screens/Space/Detail/Answers";
 import SpaceQuestions from "./screens/Space/Detail/Questions";
+import Login from "./screens/Auth/Login";
+import Register from "./screens/Auth/Register";
 
 function App() {
     return (
@@ -33,6 +35,8 @@ function App() {
                     <Route path="questions" element={<SpaceQuestions />} />
                 </Route>
             </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
         </Routes>
     );
 }

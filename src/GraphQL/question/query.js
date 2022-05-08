@@ -16,6 +16,7 @@ const questionQuery = {
                         profile_picture
                     }
                 }
+                space_id
             }
         }
     `,
@@ -24,6 +25,8 @@ const questionQuery = {
             questions_by_pk(id: $question_id) {
                 id
                 question
+                space_id
+                user_id
             }
         }
     `,
@@ -36,6 +39,7 @@ const questionQuery = {
                     id
                     answer
                 }
+                space_id
             }
         }
     `,
@@ -48,9 +52,19 @@ const questionQuery = {
                     id
                     answer
                 }
+                space_id
             }
         }
     `,
+    // GET_SPACE_FROM_QUESTION: gql`
+    //     query getSpaceFromQuestion($question_id: Int!) {
+    //         questions_by_pk(id: $question_id) {
+    //             id
+    //             question
+    //             space_id
+    //         }
+    //     }
+    // `,
 };
 
 export default questionQuery;

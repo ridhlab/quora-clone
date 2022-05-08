@@ -13,16 +13,21 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme/config";
 
 import { ApolloProvider } from "@apollo/client";
-import client from "./GraphQl/config";
+import client from "./GraphQL/config";
+
+import { Provider } from "react-redux";
+import store from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <BrowserRouter>
             <ApolloProvider client={client}>
-                <ChakraProvider theme={theme}>
-                    <App />
-                </ChakraProvider>
+                <Provider store={store}>
+                    <ChakraProvider theme={theme}>
+                        <App />
+                    </ChakraProvider>
+                </Provider>
             </ApolloProvider>
         </BrowserRouter>
     </React.StrictMode>

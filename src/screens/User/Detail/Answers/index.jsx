@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import Answer from "../../../../Components/Answer";
+import LineSeparator from "../../../../Components/LineSeparator";
 import { useParams } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
-import answerQuery from "../../../../GraphQl/answer/query";
-import LineSeparator from "../../../../Components/LineSeparator";
+import answerQuery from "../../../../GraphQL/answer/query";
 
 const UserAnswers = () => {
     const { username } = useParams();
@@ -24,6 +24,13 @@ const UserAnswers = () => {
 
     return (
         <Box>
+            {answers?.answers.length === 0 && (
+                <Box py={4}>
+                    <Text fontSize={13} textAlign="center">
+                        Belum ada jawaban
+                    </Text>
+                </Box>
+            )}
             {answers?.answers.map((answer, idx) => {
                 const { id: answerId, downvote_count, upvote_count } = answer;
                 const { id: questionId, question } = answer.question;
@@ -32,6 +39,8 @@ const UserAnswers = () => {
                     <React.Fragment key={answerId}>
                         <Box my={4}>
                             <Answer
+                                answerId={answerId}
+                                userId={userId}
                                 key={answerId}
                                 name={name}
                                 username={username}

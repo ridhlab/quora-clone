@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Answer from "../../../../Components/Answer";
 
 import { useLazyQuery } from "@apollo/client";
-import answerQuery from "../../../../GraphQl/answer/query";
+import answerQuery from "../../../../GraphQL/answer/query";
 import LineSeparator from "../../../../Components/LineSeparator";
 
 const SpaceAnswers = () => {

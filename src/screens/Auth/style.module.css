@@ -1,0 +1,33 @@
+.formWrapper{
+    margin: .5rem 0;
+}
+
+.label{
+    display: block;
+    font-size: 15px;
+}
+
+.input{
+    width: 100%;
+    font-size: 15px;
+    border: 1px solid #CDC;
+    padding: .25rem .5rem;
+}
+
+.link{
+    color:#2FD2DC
+}
+
+.link:hover{
+    color:#14BCC7
+}
+
+.eyeIcon{
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+}
+
+.eyeIcon:hover{
+    cursor: pointer;
+}

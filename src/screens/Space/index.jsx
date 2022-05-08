@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import Layout from "../../Components/Layout";
 
 import { useLazyQuery } from "@apollo/client";
-import spaceQuery from "../../GraphQl/space/query";
+import spaceQuery from "../../GraphQL/space/query";
 import Card from "../../Components/Card";
 import { Link } from "react-router-dom";
 
