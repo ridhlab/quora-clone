@@ -145,7 +145,7 @@ const Answer = ({
                         <Text>{upvoteCount}</Text>
                     </Flex>
                     <Box width={0.5} bgColor="#D6D6D6" />
-                    <Flex px={2} alignItems="center" _hover={{ bgColor: "blackAlpha.50", borderRadius: "50% 0 0 50%" }}>
+                    <Flex px={2} alignItems="center" _hover={{ bgColor: "blackAlpha.50", borderRadius: "0 50% 50% 0" }}>
                         <Downvote color="#D6D6D6" />
                         <Text>{downvoteCount}</Text>
                     </Flex>
