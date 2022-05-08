@@ -119,14 +119,16 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
     };
 
     useEffect(() => {
-        getAnswerByQuestionIdAndUserId({
-            variables: {
-                question_id: questionId,
-                user_id: userId,
-            },
-        });
+        if (isLogin) {
+            getAnswerByQuestionIdAndUserId({
+                variables: {
+                    question_id: questionId,
+                    user_id: userId,
+                },
+            });
+        }
     }, []);
-    console.log(spaceId);
+    console.log(spaceId, isLogin);
 
     // console.log(q)
 
@@ -145,7 +147,7 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
                 {answerCount} jawaban
             </Text>
             <Flex justifyContent="space-between" alignItems="center">
-                {canAnswer ? (
+                {canAnswer && isLogin ? (
                     <Box onClick={() => onOpenAnswer()}>
                         <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
                     </Box>
