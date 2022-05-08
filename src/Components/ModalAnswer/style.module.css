@@ -1,0 +1,8 @@
+.answerInput{
+    border: ridge 2px;
+    padding: 5px;
+    width: 100%;
+    min-height: 1rem;
+    overflow: auto;
+    font-size: 13px;
+}

@@ -36,11 +36,11 @@ const UserQuestions = () => {
                 </Box>
             )}
             {questions?.questions.map((question, idx) => {
-                const { answers, id } = question;
+                const { answers, id, space_id } = question;
                 return (
                     <React.Fragment key={id}>
                         <Box my={4}>
-                            <Question questionId={id} answerCount={answers.length} question={question.question} />
+                            <Question questionId={id} answerCount={answers.length} question={question.question} spaceId={space_id} />
                         </Box>
                         {idx !== questions.questions.length - 1 && <LineSeparator />}
                     </React.Fragment>

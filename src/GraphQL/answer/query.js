@@ -77,6 +77,14 @@ const answerQuery = {
             }
         }
     `,
+    GET_ASNWER_BY_QUESTION_ID_AND_USER_ID: gql`
+        query getAnswerByQuestionIdAndUserId($question_id: Int!, $user_id: Int!) {
+            answers(where: { question_id: { _eq: $question_id }, user_id: { _eq: $user_id } }) {
+                id
+                answer
+            }
+        }
+    `,
 };
 
 export default answerQuery;

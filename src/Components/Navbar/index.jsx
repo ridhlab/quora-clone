@@ -39,6 +39,7 @@ const Navbar = () => {
     });
 
     const handleLogout = () => {
+        // window.location.pathname = "/";
         dispatch(SET_LOGIN_FALSE());
         localStorage.removeItem("userToken");
         navigate("/");
@@ -102,15 +103,18 @@ const Navbar = () => {
                                 boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)"
                                 display="none"
                             >
-                                <Box h=".5px" bgColor="gray.300" />
                                 <Text fontSize={14}>
-                                    <a href={`/user/${data.users[0].username}/answers`} className="link-underline">
-                                        Profile
-                                    </a>
-                                    {/* <Link to={`/user/${data.users[0].username}/answers`} className="link-underline">
-                                        Profile
-                                    </Link> */}
+                                    {pathname === "/" || pathname === "/question" || pathname === "/space" ? (
+                                        <Link to={`/user/${data.users[0].username}/answers`} className="link-underline">
+                                            Profile
+                                        </Link>
+                                    ) : (
+                                        <a href={`/user/${data.users[0].username}/answers`} className="link-underline">
+                                            Profile
+                                        </a>
+                                    )}
                                 </Text>
+                                <Box h=".5px" bgColor="gray.300" />
                                 <Text fontSize={14}>
                                     <span className="link-underline" onClick={() => handleLogout()}>
                                         Logout

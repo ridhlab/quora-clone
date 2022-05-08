@@ -2,9 +2,9 @@ import { Text } from "@chakra-ui/react";
 
 import WrapperBtnWithIcon from "./Wrapper";
 
-const ButtonWithIcon = ({ icon, text }) => {
+const ButtonWithIcon = ({ icon, text, canClick }) => {
     return (
-        <WrapperBtnWithIcon>
+        <WrapperBtnWithIcon canClick={canClick}>
             {icon}
             <Text fontSize={13}>{text}</Text>
         </WrapperBtnWithIcon>

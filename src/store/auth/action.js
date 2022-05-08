@@ -1,7 +1,8 @@
-const SET_LOGIN_TRUE = (username) => {
+const SET_LOGIN_TRUE = (userId, username) => {
     return {
         type: "auth/setLoginTrue",
         payload: {
+            userId,
             username,
         },
     };

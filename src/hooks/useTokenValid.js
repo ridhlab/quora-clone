@@ -16,11 +16,8 @@ const useTokenValid = () => {
             const { users } = data;
             console.log(users);
             if (users.length === 1) {
-                dispatch(SET_LOGIN_TRUE(users[0].username));
+                dispatch(SET_LOGIN_TRUE(users[0].id, users[0].username));
                 setIsTokenValid(true);
-            } else {
-                if (users.length === 0) {
-                }
             }
         },
     });

@@ -14,8 +14,8 @@ import userQuery from "../../../GraphQL/user/query";
 import userMutation from "../../../GraphQL/user/mutation";
 
 import { useSelector } from "react-redux";
-import CollapseEdit from "./CollapseEdit";
-import EditIcon from "./EditIcon";
+import CollapseEdit from "../../../Components/FormEdit/CollapseEdit";
+import EditIcon from "../../../Components/FormEdit/EditIcon";
 
 import useUsernameExist from "../../../hooks/useUsernameExist";
 import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";

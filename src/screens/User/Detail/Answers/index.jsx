@@ -39,6 +39,8 @@ const UserAnswers = () => {
                     <React.Fragment key={answerId}>
                         <Box my={4}>
                             <Answer
+                                answerId={answerId}
+                                userId={userId}
                                 key={answerId}
                                 name={name}
                                 username={username}

@@ -1,0 +1,16 @@
+.inputQuestion{
+    width: 100%;
+    font-size: 13px;
+    border: 1px solid #CDC;
+    padding: .25rem .5rem;
+}
+
+.dropdown{
+    padding: .25rem;
+    border-radius: 20px;
+    border: 1px solid #CDC;
+}
+
+.dropdownItem{
+    min-width: 1rem;
+}
