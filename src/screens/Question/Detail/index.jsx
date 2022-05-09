@@ -24,6 +24,8 @@ const QuestionDetail = () => {
 
     const [isOptClick, setIsOptClick] = useState(false);
 
+    const [canAnswer, setCanAnswer] = useState(true);
+
     const [valueEditQuestion, setValueEditQuestion] = useState("");
 
     const [valueAnswer, setValueAnswer] = useState("");
@@ -45,6 +47,17 @@ const QuestionDetail = () => {
     const { ADD_ANSWER } = answerMutation;
 
     const [getAnswersByQuestionId, { data: answers, loading: loadingAnswers, error: errorAnswers }] = useLazyQuery(GET_ANSWERS_BY_QUESTION_ID);
+
+    const { GET_ASNWER_BY_QUESTION_ID_AND_USER_ID } = answerQuery;
+
+    const [getAnswerByQuestionIdAndUserId] = useLazyQuery(GET_ASNWER_BY_QUESTION_ID_AND_USER_ID, {
+        onCompleted: (data) => {
+            if (data.answers.length !== 0) {
+                setCanAnswer(false);
+            }
+            console.log(data);
+        },
+    });
 
     const [getQuestionById, { data: question, loading: loadingQuestion, error: errorQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
         onCompleted: (data) => {
@@ -130,6 +143,14 @@ const QuestionDetail = () => {
                 question_id: questionId,
             },
         });
+        if (isLogin) {
+            getAnswerByQuestionIdAndUserId({
+                variables: {
+                    question_id: questionId,
+                    user_id: userId,
+                },
+            });
+        }
     }, []);
 
     return (
@@ -153,9 +174,15 @@ const QuestionDetail = () => {
                             {isLogin ? (
                                 <>
                                     <Flex my={2} alignItems="center" justifyContent="space-between">
-                                        <Box onClick={() => onOpenAnswer()}>
-                                            <ButtonWithIcon text="Jawab" icon={<BiEdit />} />
-                                        </Box>
+                                        {canAnswer && isLogin ? (
+                                            <Box onClick={() => onOpenAnswer()}>
+                                                <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
+                                            </Box>
+                                        ) : (
+                                            <Box>
+                                                <ButtonWithIcon icon={<BiEdit />} text="Jawab" canClick={false} />
+                                            </Box>
+                                        )}
                                         <Box _hover={{ cursor: "pointer" }}>
                                             <Box
                                                 padding={1}
