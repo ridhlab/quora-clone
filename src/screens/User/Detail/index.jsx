@@ -262,35 +262,42 @@ const User = () => {
                             <Box>
                                 <Flex>
                                     <Box
-                                        _hover={{ bgColor: "gray.500", cursor: "pointer", borderRadius: 50 }}
+                                        _hover={{
+                                            bgColor: isLogin && usernameParams === usernameStore ? "gray.500" : "",
+                                            cursor: isLogin && usernameParams === usernameStore ? "pointer" : "",
+                                            borderRadius: 50,
+                                        }}
                                         position="relative"
                                         className={styles.wrapperProfilePic}
-                                        onClick={() => document.getElementById("uploadImage").click()}
+                                        onClick={() => (isLogin && usernameParams === usernameStore ? document.getElementById("uploadImage").click() : "")}
                                     >
                                         <img src={base64ImgProfile} alt={username} width={100} style={{ borderRadius: 50 }} />
-                                        <Box
-                                            width="100%"
-                                            height="100%"
-                                            fontSize={12}
-                                            position="absolute"
-                                            bgColor="rgba(0, 0, 0, .4)"
-                                            top="0"
-                                            left="0"
-                                            color="white"
-                                            borderRadius={50}
-                                            display="none"
-                                            className={styles.editText}
-                                            margin="auto"
-                                        >
-                                            <Flex justifyContent="center" alignItems="center" height="100%">
-                                                <Text fontWeight={500}>Edit Foto</Text>
-                                            </Flex>
-                                        </Box>
-                                        <Box {...getRootProps()} id="uploadImage">
-                                            <input {...getInputProps()} value="" />
-                                        </Box>
+                                        {isLogin && usernameParams === usernameStore && (
+                                            <>
+                                                <Box
+                                                    width="100%"
+                                                    height="100%"
+                                                    fontSize={12}
+                                                    position="absolute"
+                                                    bgColor="rgba(0, 0, 0, .4)"
+                                                    top="0"
+                                                    left="0"
+                                                    color="white"
+                                                    borderRadius={50}
+                                                    display="none"
+                                                    className={styles.editText}
+                                                    margin="auto"
+                                                >
+                                                    <Flex justifyContent="center" alignItems="center" height="100%">
+                                                        <Text fontWeight={500}>Edit Foto</Text>
+                                                    </Flex>
+                                                </Box>
+                                                <Box {...getRootProps()} id="uploadImage">
+                                                    <input {...getInputProps()} value="" />
+                                                </Box>
+                                            </>
+                                        )}
                                     </Box>
-                                    {/* <input type="file" style={{ display: "none" }} id="uploadImage" accept=".jpef, .png, .jpg" /> */}
                                 </Flex>
                                 {base64ImgProfile !== profile_picture ? (
                                     <>

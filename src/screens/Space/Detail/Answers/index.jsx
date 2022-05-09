@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Answer from "../../../../Components/Answer";
 
@@ -24,6 +24,11 @@ const SpaceAnswers = () => {
 
     return (
         <Box>
+            {answers?.answers.length === 0 && (
+                <Text fontSize={13} textAlign="center" my={4}>
+                    Belum ada jawaban
+                </Text>
+            )}
             {answers?.answers.map((answer, idx) => {
                 const { upvote_count, downvote_count, id } = answer;
                 const { id: questionId, question } = answer.question;
