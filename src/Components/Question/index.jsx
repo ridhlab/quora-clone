@@ -157,19 +157,21 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
                     </Box>
                 )}
 
-                <Box _hover={{ cursor: "pointer" }}>
-                    <Box padding={1} position="relative" borderRadius={50} _hover={{ bgColor: "gray.100" }} onClick={() => setIsOptClick(!isOptClick)}>
-                        <BsThreeDots />
-                    </Box>
-                    {isOptClick && (
-                        <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
-                            <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
-                                <FiEdit2 size={10} />
-                                <Text fontSize={13}>Edit</Text>
-                            </Flex>
+                {isLogin && (
+                    <Box _hover={{ cursor: "pointer" }}>
+                        <Box padding={1} position="relative" borderRadius={50} _hover={{ bgColor: "gray.100" }} onClick={() => setIsOptClick(!isOptClick)}>
+                            <BsThreeDots />
                         </Box>
-                    )}
-                </Box>
+                        {isOptClick && (
+                            <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
+                                <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
+                                    <FiEdit2 size={10} />
+                                    <Text fontSize={13}>Edit</Text>
+                                </Flex>
+                            </Box>
+                        )}
+                    </Box>
+                )}
             </Flex>
             <Modal isOpen={isOpenAnswer} onClose={onCloseAnswer} isCentered>
                 <ModalAnswer

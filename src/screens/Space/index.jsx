@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import Layout from "../../Components/Layout";
+import { Link } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
 import spaceQuery from "../../GraphQL/space/query";
 import Card from "../../Components/Card";
-import { Link } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 const Space = () => {
     const { GET_SPACES } = spaceQuery;
+
+    const { isLogin } = useSelector((state) => state.authReducer);
 
     const [getSpaces, { data: spaces, loading, error }] = useLazyQuery(GET_SPACES);
 
@@ -40,6 +44,7 @@ const Space = () => {
                     );
                 })}
             </Box>
+            {/* {isLogin && <Box fontSize={13}>Tambah Ruang</Box>} */}
         </Layout>
     );
 };

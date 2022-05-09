@@ -28,7 +28,7 @@ const QuestionDetail = () => {
 
     const [valueAnswer, setValueAnswer] = useState("");
 
-    const { userId, username } = useSelector((state) => state.authReducer);
+    const { userId, username, isLogin } = useSelector((state) => state.authReducer);
 
     // const [isEditQuestion, setIsEditQuestion] = useState(false);
 
@@ -150,38 +150,47 @@ const QuestionDetail = () => {
                     </Modal>
                     {!loadingQuestion && typeof question !== "undefined" && (
                         <>
-                            <Flex my={2} alignItems="center" justifyContent="space-between">
-                                <Box onClick={() => onOpenAnswer()}>
-                                    <ButtonWithIcon text="Jawab" icon={<BiEdit />} />
-                                </Box>
-                                <Box _hover={{ cursor: "pointer" }}>
-                                    <Box
-                                        padding={1}
-                                        position="relative"
-                                        borderRadius={50}
-                                        _hover={{ bgColor: "gray.100" }}
-                                        onClick={() => setIsOptClick(!isOptClick)}
-                                    >
-                                        <BsThreeDots />
-                                    </Box>
-                                    {isOptClick && (
-                                        <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
-                                            <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
-                                                <FiEdit2 size={10} />
-                                                <Text fontSize={13}>Edit</Text>
-                                            </Flex>
+                            {isLogin ? (
+                                <>
+                                    <Flex my={2} alignItems="center" justifyContent="space-between">
+                                        <Box onClick={() => onOpenAnswer()}>
+                                            <ButtonWithIcon text="Jawab" icon={<BiEdit />} />
                                         </Box>
-                                    )}
+                                        <Box _hover={{ cursor: "pointer" }}>
+                                            <Box
+                                                padding={1}
+                                                position="relative"
+                                                borderRadius={50}
+                                                _hover={{ bgColor: "gray.100" }}
+                                                onClick={() => setIsOptClick(!isOptClick)}
+                                            >
+                                                <BsThreeDots />
+                                            </Box>
+                                            {isOptClick && (
+                                                <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
+                                                    <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
+                                                        <FiEdit2 size={10} />
+                                                        <Text fontSize={13}>Edit</Text>
+                                                    </Flex>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    </Flex>
+                                    <Modal isOpen={isOpenAnswer} onClose={onCloseAnswer} isCentered>
+                                        <ModalAnswer
+                                            question={question?.questions_by_pk.question}
+                                            handleClickCloseAnswer={handleClickCloseAnswer}
+                                            setValueAnswer={setValueAnswer}
+                                            handleClickAnswer={handleClickAnswer}
+                                        />
+                                    </Modal>
+                                </>
+                            ) : (
+                                <Box onClick={() => onOpenAnswer()} my={2}>
+                                    <ButtonWithIcon text="Jawab" icon={<BiEdit />} canClick={false} />
                                 </Box>
-                            </Flex>
-                            <Modal isOpen={isOpenAnswer} onClose={onCloseAnswer} isCentered>
-                                <ModalAnswer
-                                    question={question?.questions_by_pk.question}
-                                    handleClickCloseAnswer={handleClickCloseAnswer}
-                                    setValueAnswer={setValueAnswer}
-                                    handleClickAnswer={handleClickAnswer}
-                                />
-                            </Modal>
+                            )}
+
                             <hr />
                             <hr />
                         </>
