@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
@@ -28,6 +28,11 @@ const SpaceQuestions = () => {
 
     return (
         <Box>
+            {questions?.questions.length === 0 && (
+                <Text fontSize={13} textAlign="center" my={4}>
+                    Belum ada pertanyaan
+                </Text>
+            )}
             {questions?.questions.map((question, idx) => {
                 const { id, answers, space_id } = question;
                 return (

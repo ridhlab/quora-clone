@@ -1,20 +1,55 @@
-import { useEffect } from "react";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import styles from "./style.module.css";
+import { Box, Flex, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, useDisclosure, ModalCloseButton } from "@chakra-ui/react";
 import Layout from "../../Components/Layout";
 import { Link } from "react-router-dom";
-
-import { useLazyQuery } from "@apollo/client";
-import spaceQuery from "../../GraphQL/space/query";
 import Card from "../../Components/Card";
+import { IoMdAddCircle } from "react-icons/io";
+
+import { useLazyQuery, useMutation } from "@apollo/client";
+import spaceQuery from "../../GraphQL/space/query";
+import spaceMutation from "../../GraphQL/space/mutation";
 
 import { useSelector } from "react-redux";
 
 const Space = () => {
+    const [nameValue, setNameValue] = useState("");
+    const [descValue, setDescValue] = useState("");
+
     const { GET_SPACES } = spaceQuery;
+
+    const { ADD_SPACE } = spaceMutation;
 
     const { isLogin } = useSelector((state) => state.authReducer);
 
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
     const [getSpaces, { data: spaces, loading, error }] = useLazyQuery(GET_SPACES);
+
+    const [addSpace] = useMutation(ADD_SPACE, {
+        onCompleted: (data) => {
+            onClose();
+            console.log(data);
+        },
+        refetchQueries: [GET_SPACES, "getSpaces"],
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(nameValue, descValue);
+        addSpace({
+            variables: {
+                name: nameValue,
+                desc: descValue,
+            },
+        });
+    };
+
+    const handleClose = () => {
+        setNameValue("");
+        setDescValue("");
+        onClose();
+    };
 
     useEffect(() => {
         getSpaces();
@@ -44,7 +79,89 @@ const Space = () => {
                     );
                 })}
             </Box>
-            {/* {isLogin && <Box fontSize={13}>Tambah Ruang</Box>} */}
+            {isLogin && (
+                <>
+                    <Flex>
+                        <Button
+                            alignItems="center"
+                            p={2}
+                            bgColor="primary.index"
+                            borderRadius={50}
+                            color="white"
+                            position="fixed"
+                            bottom={10}
+                            right={{ base: "10%", md: "20%", lg: "28%" }}
+                            _hover={{ bgColor: "primary.hover" }}
+                            onClick={() => onOpen()}
+                        >
+                            <IoMdAddCircle />
+                            <Text fontSize={13}>Tambah Ruang</Text>
+                        </Button>
+                    </Flex>
+                    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+                        <ModalOverlay />
+                        <ModalContent p={4}>
+                            <ModalHeader>Tambah Ruang</ModalHeader>
+                            <ModalBody>
+                                <form onSubmit={handleSubmit}>
+                                    <Box>
+                                        <label className={styles.label}>Nama Ruang</label>
+                                        <input
+                                            className={styles.input}
+                                            name="name"
+                                            value={nameValue}
+                                            onChange={(e) => setNameValue(e.target.value)}
+                                            required
+                                            autoComplete="off"
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <label className={styles.label}>Deskripsi</label>
+                                        <textarea
+                                            className={styles.input}
+                                            rows={3}
+                                            name="desc"
+                                            value={descValue}
+                                            onChange={(e) => setDescValue(e.target.value)}
+                                            required
+                                            autoComplete="off"
+                                        />
+                                    </Box>
+                                    <Flex justifyContent="flex-end" mt={4}>
+                                        <Button
+                                            type="submit"
+                                            bgColor="primary.index"
+                                            display="inline-block"
+                                            h="auto"
+                                            color="white"
+                                            borderRadius={50}
+                                            fontSize={13}
+                                            mx={2}
+                                            px={8}
+                                            py={3}
+                                            _hover={{ bgColor: "primary.hover" }}
+                                        >
+                                            Tambah
+                                        </Button>
+                                        <Button
+                                            display="inline-block"
+                                            h="auto"
+                                            borderRadius={50}
+                                            fontSize={13}
+                                            mx={2}
+                                            px={8}
+                                            py={3}
+                                            onClick={() => handleClose()}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Flex>
+                                </form>
+                            </ModalBody>
+                        </ModalContent>
+                    </Modal>
+                </>
+            )}
         </Layout>
     );
 };
