@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./style.module.css";
 import { Box, Button, Container, Flex, Text, UnorderedList } from "@chakra-ui/react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import GroupIcon from "../Icon/Group";
 import HomeIcon from "../Icon/Home";
 import PenIcon from "../Icon/Pen";
@@ -15,33 +15,28 @@ import ProfileButton from "../ProfileButton";
 import { SET_LOGIN_FALSE } from "../../store/auth/action";
 
 import useTokenValid from "../../hooks/useTokenValid";
+import { removeAuth } from "../../auth/auth";
 
-const Navbar = () => {
+const Navbar = React.memo(() => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
     const { pathname } = useLocation();
 
-    const { checkTokenValid, isTokenValid } = useTokenValid();
+    const { username: usernameParams } = useParams();
+
+    const { checkTokenValid } = useTokenValid();
 
     const { GET_USER_BY_USERNAME } = userQuery;
 
-    const { isLogin, username, isLoadingAuth } = useSelector((state) => state.authReducer);
+    const { isLogin, username } = useSelector((state) => state.authReducer);
 
-    const [getUserByUsername, { data, loading, error }] = useLazyQuery(GET_USER_BY_USERNAME, {
-        onCompleted: (data) => {
-            console.log(data);
-        },
-        onError: (error) => {
-            console.log(error);
-        },
-    });
+    const [getUserByUsername, { data }] = useLazyQuery(GET_USER_BY_USERNAME);
 
     const handleLogout = () => {
-        // window.location.pathname = "/";
         dispatch(SET_LOGIN_FALSE());
-        localStorage.removeItem("userToken");
+        removeAuth();
         navigate("/");
     };
 
@@ -57,6 +52,7 @@ const Navbar = () => {
 
     useEffect(() => {
         if (username !== "") {
+            console.log("kesini", username);
             getUserByUsername({
                 variables: {
                     username: username,
@@ -69,11 +65,7 @@ const Navbar = () => {
         if (getLocalStorage() !== null) {
             checkTokenValid(getLocalStorage());
         }
-    }, []);
-
-    useEffect(() => {
-        console.log("islogin", isLogin);
-    }, [isLogin]);
+    }, [usernameParams]);
 
     return (
         <Box bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)" py={2} position="sticky" top={0} zIndex={99}>
@@ -90,7 +82,6 @@ const Navbar = () => {
                 </UnorderedList>
                 <Box>
                     {!localStorage.getItem("userToken") && !isLogin ? <LoginButton /> : ""}
-
                     {isLogin && typeof data !== "undefined" && (
                         <Box className={styles.dropdown} cursor="pointer">
                             <ProfileButton profilePicture={data.users[0].profile_picture} name={data.users[0].name} username={data.users[0].username} />
@@ -104,15 +95,15 @@ const Navbar = () => {
                                 display="none"
                             >
                                 <Text fontSize={14}>
-                                    {pathname === "/" || pathname === "/question" || pathname === "/space" ? (
-                                        <Link to={`/user/${data.users[0].username}/answers`} className="link-underline">
-                                            Profile
-                                        </Link>
-                                    ) : (
-                                        <a href={`/user/${data.users[0].username}/answers`} className="link-underline">
-                                            Profile
-                                        </a>
-                                    )}
+                                    {/* {pathname === "/" || pathname === "/question" || pathname === "/space" ? ( */}
+                                    <Link to={`/user/${data.users[0].username}/answers`} className="link-underline">
+                                        Profile
+                                    </Link>
+                                    {/* // ) : ( //{" "}
+                                    <a href={`/user/${data.users[0].username}/answers`} className="link-underline">
+                                        // Profile //{" "}
+                                    </a>
+                                    // )} */}
                                 </Text>
                                 <Box h=".5px" bgColor="gray.300" />
                                 <Text fontSize={14}>
@@ -127,6 +118,6 @@ const Navbar = () => {
             </Container>
         </Box>
     );
-};
+});
 
 export default Navbar;

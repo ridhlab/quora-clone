@@ -20,7 +20,7 @@ const UserAnswers = () => {
                 username,
             },
         });
-    }, []);
+    }, [username]);
 
     return (
         <Box>

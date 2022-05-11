@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "./style.module.css";
 import { Box, Button, Flex } from "@chakra-ui/react";
 
-const QuestionForm = ({ userId, profilePicture, username, spaces, handleClick }) => {
+const QuestionForm = React.memo(({ userId, profilePicture, username, spaces, handleClick }) => {
+    console.log("question form");
     const [spaceIdSelected, setSpaceIdSelected] = useState("Publik");
     const [questionValue, setQuestionValue] = useState("");
     console.log(spaceIdSelected, questionValue);
@@ -57,6 +58,6 @@ const QuestionForm = ({ userId, profilePicture, username, spaces, handleClick })
             </Flex>
         </>
     );
-};
+});
 
 export default QuestionForm;

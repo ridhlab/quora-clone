@@ -33,10 +33,10 @@ const Home = () => {
 
     const { checkTokenValid, isTokenValid } = useTokenValid();
 
-    const [getAnswers, { data: answers, error: errorAnswers, loading: loadingAnswers }] = useLazyQuery(GET_ANSWERS);
+    const [getAnswers, { data: answers, error: errorAnswers, loading: loadingAnswers, refetch }] = useLazyQuery(GET_ANSWERS);
     const [getQuestions, { data: questions, error: errorQuestions, loading: loadingQuestions }] = useLazyQuery(GET_QUESTIONS);
     const [getSpaces, { data: spaces, error: errorSpaces, loading: loadingSpaces }] = useLazyQuery(GET_SPACES);
-    const [getUserBuysername, { data: users, loading: loadingUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
+    const [getUserBysername, { data: users, loading: loadingUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
         onCompleted: (data) => {
             setUser(data.users);
         },
@@ -61,22 +61,24 @@ const Home = () => {
     };
 
     const handleSubmitQuestion = (question, spaceId, userId) => {
-        if (spaceId === "Publik") {
-            console.log(question, spaceId, userId);
-            addQuestionWithoutSpace({
-                variables: {
-                    question,
-                    user_id: userId,
-                },
-            });
-        } else {
-            addQuestionWithSpace({
-                variables: {
-                    question,
-                    user_id: userId,
-                    space_id: spaceId,
-                },
-            });
+        if (question !== "") {
+            if (spaceId === "Publik") {
+                console.log(question, spaceId, userId);
+                addQuestionWithoutSpace({
+                    variables: {
+                        question,
+                        user_id: userId,
+                    },
+                });
+            } else {
+                addQuestionWithSpace({
+                    variables: {
+                        question,
+                        user_id: userId,
+                        space_id: spaceId,
+                    },
+                });
+            }
         }
     };
 
@@ -102,7 +104,7 @@ const Home = () => {
 
     useEffect(() => {
         if (usernameStore !== "") {
-            getUserBuysername({
+            getUserBysername({
                 variables: {
                     username: usernameStore,
                 },
@@ -181,6 +183,7 @@ const Home = () => {
                                     answer={answer.answer}
                                     upvoteCount={upvote_count}
                                     downvoteCount={downvote_count}
+                                    refetch={refetch}
                                     showQuestion={true}
                                     canClickLinkProfile={true}
                                 />

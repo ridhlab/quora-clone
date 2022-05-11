@@ -16,6 +16,7 @@ const questionQuery = {
                         profile_picture
                     }
                 }
+                user_id
                 space_id
             }
         }

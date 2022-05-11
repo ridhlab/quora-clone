@@ -101,6 +101,7 @@ const User = () => {
         onCompleted: (data) => {
             console.log(data);
             setAuth(btoa(data.update_users.returning[0].username));
+            // navigate(`/user/${data.update_users.returning[0].username}/answers`);
             window.location.pathname = `/user/${data.update_users.returning[0].username}/answers`;
         },
     });
@@ -212,13 +213,14 @@ const User = () => {
     }, [isUsernameExist]);
 
     useEffect(() => {
+        console.log("kesini woyyyyy");
         checkPath();
         getUserByUsername({
             variables: {
                 username: usernameParams,
             },
         });
-    }, []);
+    }, [usernameParams]);
 
     useEffect(() => {
         console.log("isLogin", isLogin);

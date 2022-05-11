@@ -57,6 +57,7 @@ const QuestionDetail = () => {
             }
             console.log(data);
         },
+        refetchQueries: [GET_ANSWERS_BY_QUESTION_ID, "getAnswersByQuestionId"],
     });
 
     const [getQuestionById, { data: question, loading: loadingQuestion, error: errorQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
@@ -122,14 +123,16 @@ const QuestionDetail = () => {
 
     const handleClickAnswer = () => {
         console.log(valueAnswer);
-        addAnswer({
-            variables: {
-                answer: valueAnswer,
-                question_id: questionId,
-                space_id: question?.questions_by_pk.space_id,
-                user_id: userId,
-            },
-        });
+        if (valueAnswer !== "") {
+            addAnswer({
+                variables: {
+                    answer: valueAnswer,
+                    question_id: questionId,
+                    space_id: question?.questions_by_pk.space_id,
+                    user_id: userId,
+                },
+            });
+        }
     };
 
     useEffect(() => {
@@ -183,25 +186,27 @@ const QuestionDetail = () => {
                                                 <ButtonWithIcon icon={<BiEdit />} text="Jawab" canClick={false} />
                                             </Box>
                                         )}
-                                        <Box _hover={{ cursor: "pointer" }}>
-                                            <Box
-                                                padding={1}
-                                                position="relative"
-                                                borderRadius={50}
-                                                _hover={{ bgColor: "gray.100" }}
-                                                onClick={() => setIsOptClick(!isOptClick)}
-                                            >
-                                                <BsThreeDots />
-                                            </Box>
-                                            {isOptClick && (
-                                                <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
-                                                    <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
-                                                        <FiEdit2 size={10} />
-                                                        <Text fontSize={13}>Edit</Text>
-                                                    </Flex>
+                                        {question?.questions_by_pk.user_id === userId && (
+                                            <Box _hover={{ cursor: "pointer" }}>
+                                                <Box
+                                                    padding={1}
+                                                    position="relative"
+                                                    borderRadius={50}
+                                                    _hover={{ bgColor: "gray.100" }}
+                                                    onClick={() => setIsOptClick(!isOptClick)}
+                                                >
+                                                    <BsThreeDots />
                                                 </Box>
-                                            )}
-                                        </Box>
+                                                {isOptClick && (
+                                                    <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
+                                                        <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
+                                                            <FiEdit2 size={10} />
+                                                            <Text fontSize={13}>Edit</Text>
+                                                        </Flex>
+                                                    </Box>
+                                                )}
+                                            </Box>
+                                        )}
                                     </Flex>
                                     <Modal isOpen={isOpenAnswer} onClose={onCloseAnswer} isCentered>
                                         <ModalAnswer

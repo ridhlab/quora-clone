@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Text, useDisclosure, Modal, ModalOverlay } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import answerQuery from "../../GraphQL/answer/query";
 
-const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
+const Question = React.memo(({ answerCount, questionId, question, spaceId, answers, userId }) => {
     const [isOptClick, setIsOptClick] = useState(false);
 
     const [canAnswer, setCanAnswer] = useState(true);
@@ -25,9 +25,10 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
     const [valueAnswer, setValueAnswer] = useState("");
 
     const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
+
     const { isOpen: isOpenAnswer, onOpen: onOpenAnswer, onClose: onCloseAnswer } = useDisclosure();
 
-    const { isLogin, username, userId } = useSelector((state) => state.authReducer);
+    const { isLogin, username, userId: userIdStore } = useSelector((state) => state.authReducer);
 
     const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
 
     const [getAnswerByQuestionIdAndUserId] = useLazyQuery(GET_ASNWER_BY_QUESTION_ID_AND_USER_ID, {
         onCompleted: (data) => {
+            // console.log(data);
             if (data.answers.length !== 0) {
                 setCanAnswer(false);
             }
@@ -108,14 +110,17 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
     };
 
     const handleClickAnswer = () => {
-        addAnswer({
-            variables: {
-                answer: valueAnswer,
-                question_id: questionId,
-                space_id: spaceId,
-                user_id: userId,
-            },
-        });
+        if (valueAnswer !== "") {
+            addAnswer({
+                variables: {
+                    answer: valueAnswer,
+                    question_id: questionId,
+                    space_id: spaceId,
+                    user_id: userIdStore,
+                },
+            });
+        }
+        console.log("kesini", userId);
     };
 
     useEffect(() => {
@@ -123,7 +128,7 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
             getAnswerByQuestionIdAndUserId({
                 variables: {
                     question_id: questionId,
-                    user_id: userId,
+                    user_id: userIdStore,
                 },
             });
         }
@@ -157,7 +162,7 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
                     </Box>
                 )}
 
-                {isLogin && (
+                {isLogin && userIdStore === userId && (
                     <Box _hover={{ cursor: "pointer" }}>
                         <Box padding={1} position="relative" borderRadius={50} _hover={{ bgColor: "gray.100" }} onClick={() => setIsOptClick(!isOptClick)}>
                             <BsThreeDots />
@@ -192,6 +197,6 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
             </Modal>
         </>
     );
-};
+});
 
 export default Question;

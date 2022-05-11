@@ -1,7 +1,8 @@
 import styles from "./style.module.css";
 import { ModalBody, ModalOverlay, ModalContent, ModalHeader, Flex, Button } from "@chakra-ui/react";
+import React from "react";
 
-const ModalEdit = ({ modalTitle, valueEdit, setValueEdit, handleSubmit, handleClickClose }) => {
+const ModalEdit = React.memo(({ modalTitle, valueEdit, setValueEdit, handleSubmit, handleClickClose }) => {
     return (
         <>
             <ModalOverlay />
@@ -35,6 +36,6 @@ const ModalEdit = ({ modalTitle, valueEdit, setValueEdit, handleSubmit, handleCl
             </ModalContent>
         </>
     );
-};
+});
 
 export default ModalEdit;

@@ -37,7 +37,7 @@ const SpaceAnswers = () => {
                     <React.Fragment key={id}>
                         <Box my={4}>
                             <Answer
-                                key={answer.id}
+                                answerId={answer.id}
                                 questionId={questionId}
                                 name={name}
                                 username={username}
