@@ -190,9 +190,7 @@ const Register = () => {
                             required
                         />
                         {usernameValue.length > 18 && <ErrorMessage message="Panjang username terdiri dari 5-18 karakter" />}
-
                         {usernameValue.length > 0 && usernameValue.length < 5 && <ErrorMessage message="Panjang username terdiri dari 5-18 karakter" />}
-
                         {usernameValue.length <= 18 && usernameValue.length >= 5 && !isUsernameValid && (
                             <ErrorMessage message="Username hanya terdiri dari karakter huruf dan angka" />
                         )}
