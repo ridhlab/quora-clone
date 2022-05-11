@@ -1,13 +1,13 @@
+import React from "react";
 import styles from "./style.module.css";
 import { ModalBody, ModalOverlay, ModalContent, ModalHeader, Flex, Button, Box } from "@chakra-ui/react";
 
-const ModalAnswer = ({ question, handleClickCloseAnswer, handleClickAnswer, setValueAnswer }) => {
+const ModalAnswer = React.memo(({ question, handleClickCloseAnswer, handleClickAnswer, setValueAnswer }) => {
     return (
         <>
             <ModalOverlay />
             <ModalContent p={4}>
                 <ModalHeader>{question}</ModalHeader>
-
                 <ModalBody>
                     <Box contentEditable className={styles.answerInput} onInput={(e) => setValueAnswer(e.currentTarget.textContent)}></Box>
                     <Flex justifyContent="flex-end" mt={4}>
@@ -35,6 +35,6 @@ const ModalAnswer = ({ question, handleClickCloseAnswer, handleClickAnswer, setV
             </ModalContent>
         </>
     );
-};
+});
 
 export default ModalAnswer;

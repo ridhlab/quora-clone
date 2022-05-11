@@ -1,4 +1,6 @@
-const Logo = ({ color }) => {
+import React from "react";
+
+const Logo = React.memo(({ color }) => {
     return (
         <svg width="150" height="23" viewBox="0 0 150 23" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -7,7 +9,7 @@ const Logo = ({ color }) => {
             />
         </svg>
     );
-};
+});
 
 Logo.defaultProps = {
     color: "#2FD2DC",

@@ -1,4 +1,6 @@
-const GroupIcon = ({ color }) => {
+import React from "react";
+
+const GroupIcon = React.memo(({ color }) => {
     return (
         <svg width="30" height="26" viewBox="0 0 38 26" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -7,6 +9,6 @@ const GroupIcon = ({ color }) => {
             />
         </svg>
     );
-};
+});
 
 export default GroupIcon;

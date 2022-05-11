@@ -1,6 +1,7 @@
+import React from "react";
 import { Box } from "@chakra-ui/react";
 
-const LineSeparator = () => {
+const LineSeparator = React.memo(() => {
     return (
         <Box>
             <hr />
@@ -9,6 +10,6 @@ const LineSeparator = () => {
             <hr />
         </Box>
     );
-};
+});
 
 export default LineSeparator;

@@ -1,7 +1,8 @@
-import { Button, Collapse } from "@chakra-ui/react";
+import React from "react";
 import styles from "./style.module.css";
+import { Button, Collapse } from "@chakra-ui/react";
 
-const CollapseEdit = ({ isOpen, onToggle, setIsEdit, isEdit, valueEdit, setValueEdit, editName, handleEdit }) => {
+const CollapseEdit = React.memo(({ isOpen, onToggle, setIsEdit, isEdit, valueEdit, setValueEdit, editName, handleEdit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         handleEdit(valueEdit, editName);
@@ -43,5 +44,6 @@ const CollapseEdit = ({ isOpen, onToggle, setIsEdit, isEdit, valueEdit, setValue
             </form>
         </Collapse>
     );
-};
+});
+
 export default CollapseEdit;

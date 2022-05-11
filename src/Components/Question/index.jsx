@@ -1,21 +1,33 @@
-import { useEffect, useState } from "react";
-import { Box, Flex, Text, useDisclosure, Modal, ModalOverlay } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Text, useDisclosure, Modal } from "@chakra-ui/react";
+
+// React Router
 import { Link, useNavigate } from "react-router-dom";
+
+// Components
+import ButtonWithIcon from "../ButtonWithIcon";
+import ModalEdit from "../ModalEdit";
+import ModalAnswer from "../ModalAnswer";
+
+// Icons
 import { BiEdit } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
 import { BsThreeDots } from "react-icons/bs";
-import ButtonWithIcon from "../ButtonWithIcon";
+
+// Store
+import { useSelector } from "react-redux";
+
+// GraphQL
+import { useLazyQuery, useMutation } from "@apollo/client";
 import questionMutation from "../../GraphQL/question/mutation";
 import answerMutation from "../../GraphQL/answer/mutation";
 import questionQuery from "../../GraphQL/question/query";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import ModalEdit from "../ModalEdit";
-import ModalAnswer from "../ModalAnswer";
-import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import answerQuery from "../../GraphQL/answer/query";
 
-const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
+// Library
+import Swal from "sweetalert2";
+
+const Question = React.memo(({ answerCount, questionId, question, spaceId, answers, userId }) => {
     const [isOptClick, setIsOptClick] = useState(false);
 
     const [canAnswer, setCanAnswer] = useState(true);
@@ -25,9 +37,10 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
     const [valueAnswer, setValueAnswer] = useState("");
 
     const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
+
     const { isOpen: isOpenAnswer, onOpen: onOpenAnswer, onClose: onCloseAnswer } = useDisclosure();
 
-    const { isLogin, username, userId } = useSelector((state) => state.authReducer);
+    const { isLogin, userId: userIdStore } = useSelector((state) => state.authReducer);
 
     const navigate = useNavigate();
 
@@ -44,7 +57,6 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
             if (data.answers.length !== 0) {
                 setCanAnswer(false);
             }
-            console.log(data);
         },
     });
 
@@ -66,7 +78,6 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
 
     const [addAnswer] = useMutation(ADD_ANSWER, {
         onCompleted: () => {
-            console.log("kesini");
             onCloseAnswer();
             new Promise((resolve, reject) => {
                 resolve(
@@ -108,14 +119,16 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
     };
 
     const handleClickAnswer = () => {
-        addAnswer({
-            variables: {
-                answer: valueAnswer,
-                question_id: questionId,
-                space_id: spaceId,
-                user_id: userId,
-            },
-        });
+        if (valueAnswer !== "") {
+            addAnswer({
+                variables: {
+                    answer: valueAnswer,
+                    question_id: questionId,
+                    space_id: spaceId,
+                    user_id: userIdStore,
+                },
+            });
+        }
     };
 
     useEffect(() => {
@@ -123,16 +136,11 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
             getAnswerByQuestionIdAndUserId({
                 variables: {
                     question_id: questionId,
-                    user_id: userId,
+                    user_id: userIdStore,
                 },
             });
         }
     }, []);
-    console.log(spaceId, isLogin);
-
-    // console.log(q)
-
-    // console.log(isLogin, username, userId);
 
     return (
         <>
@@ -157,7 +165,7 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
                     </Box>
                 )}
 
-                {isLogin && (
+                {isLogin && userIdStore === userId && (
                     <Box _hover={{ cursor: "pointer" }}>
                         <Box padding={1} position="relative" borderRadius={50} _hover={{ bgColor: "gray.100" }} onClick={() => setIsOptClick(!isOptClick)}>
                             <BsThreeDots />
@@ -192,6 +200,6 @@ const Question = ({ answerCount, questionId, question, spaceId, answers }) => {
             </Modal>
         </>
     );
-};
+});
 
 export default Question;

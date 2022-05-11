@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import Card from "../../../Components/Card";
-import Layout from "../../../Components/Layout";
+
+// React router
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
+// Components
+import Card from "../../../Components/Card";
+import Layout from "../../../Components/Layout";
+import Tab from "../../../Components/Tab";
+
+// GraphQL
 import { useLazyQuery } from "@apollo/client";
 import spaceQuery from "../../../GraphQL/space/query";
-import Tab from "../../../Components/Tab";
 
 const SpaceDetail = () => {
     const { pathname } = useLocation();
@@ -17,7 +22,7 @@ const SpaceDetail = () => {
 
     const { GET_SPACE_BY_ID } = spaceQuery;
 
-    const [getSpaceById, { data: spaceData, loading, error }] = useLazyQuery(GET_SPACE_BY_ID);
+    const [getSpaceById, { data: spaceData }] = useLazyQuery(GET_SPACE_BY_ID);
 
     const [space, setSpace] = useState({
         id: "",

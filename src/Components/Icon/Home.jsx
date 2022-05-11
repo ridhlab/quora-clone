@@ -1,4 +1,6 @@
-const HomeIcon = ({ color }) => {
+import React from "react";
+
+const HomeIcon = React.memo(({ color }) => {
     return (
         <svg width="24" height="24" viewBox="0 0 31 29" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -7,6 +9,6 @@ const HomeIcon = ({ color }) => {
             />
         </svg>
     );
-};
+});
 
 export default HomeIcon;

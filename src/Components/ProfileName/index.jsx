@@ -1,6 +1,7 @@
+import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 
-const ProfileName = ({ profilePicture, username, name }) => {
+const ProfileName = React.memo(({ profilePicture, username, name }) => {
     return (
         <Flex alignItems="center">
             <Box>
@@ -11,6 +12,6 @@ const ProfileName = ({ profilePicture, username, name }) => {
             </Text>
         </Flex>
     );
-};
+});
 
 export default ProfileName;

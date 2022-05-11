@@ -1,17 +1,28 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../style.module.css";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+
+// React Router
+import { Link, useNavigate } from "react-router-dom";
+
+// Components
 import Card from "../../../Components/Card";
 import Logo from "../../../Components/Logo";
 import WrapperAuth from "../../../Components/WrapperAuth";
 import { ErrorMessage, ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
-import bcrypt from "bcryptjs";
-import userQuery from "../../../GraphQL/user/query";
+
+// GraphQL
 import userMutation from "../../../GraphQL/user/mutation";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { setAuth } from "../../../auth/auth";
+import { useMutation } from "@apollo/client";
+
+// Hooks
 import useUsernameExist from "../../../hooks/useUsernameExist";
+
+// Module
+import { setAuth } from "../../../auth/auth";
+
+// Library
+import bcrypt from "bcryptjs";
 
 const Register = () => {
     const [value, setValue] = useState({
@@ -74,26 +85,21 @@ const Register = () => {
                 password: encryptPassword,
             },
         });
-        // console.log(passwordValue, encryptPassword);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isNameValid && isUsernameValid && isPasswordMatch) {
-            // getUserForAuth({ variables: { username: usernameValue } }); //replace with hooks
             checkUsernameExist(usernameValue);
         } else {
             setShowErrorPrompt(true);
         }
-        console.log(isNameValid, isUsernameValid, isPasswordMatch);
     };
 
     useEffect(() => {
-        console.log("isUsernameExistHooks", isUsernameExistHooks);
         if (isUsernameExistHooks) {
             setIsUsernameExist(true);
         } else {
-            console.log("kesini woy");
             if (
                 isNameValid &&
                 isUsernameValid &&
@@ -115,7 +121,6 @@ const Register = () => {
     }, [nameValue]);
 
     useEffect(() => {
-        console.log(usernameValue);
         if (usernameValue.length > 18 || usernameValue.length < 5) {
             setIsUsernameValid(false);
         } else {
@@ -146,17 +151,6 @@ const Register = () => {
             }, 2500);
         }
     }, [isUsernameExist]);
-
-    // useEffect(() => {
-    //     if (typeof users !== "undefined") {
-    //         if (users.users.length === 0) {
-    //             console.log("kesini");
-    //             registerSuccess();
-    //         } else {
-    //             setIsUsernameExist(true);
-    //         }
-    //     }
-    // }, [users, loading, error]);
 
     return (
         <WrapperAuth>
@@ -196,7 +190,9 @@ const Register = () => {
                             required
                         />
                         {usernameValue.length > 18 && <ErrorMessage message="Panjang username terdiri dari 5-18 karakter" />}
+
                         {usernameValue.length > 0 && usernameValue.length < 5 && <ErrorMessage message="Panjang username terdiri dari 5-18 karakter" />}
+
                         {usernameValue.length <= 18 && usernameValue.length >= 5 && !isUsernameValid && (
                             <ErrorMessage message="Username hanya terdiri dari karakter huruf dan angka" />
                         )}
