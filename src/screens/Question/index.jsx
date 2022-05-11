@@ -23,7 +23,6 @@ const QuestionScreen = () => {
         <Layout>
             <Box maxW={500} margin="auto">
                 {data?.questions.map((question, idx) => {
-                    console.log(question);
                     const { answers, id, space_id, user_id } = question;
                     return (
                         <Card key={id}>
