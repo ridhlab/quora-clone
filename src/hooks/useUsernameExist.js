@@ -10,7 +10,6 @@ const useUsernameExist = () => {
     const [getUserForAuth] = useLazyQuery(GET_USER_FOR_AUTH, {
         onCompleted: (data) => {
             const { users } = data;
-            console.log(users);
             if (users.length === 1) {
                 setIsUsernameExist(true);
             } else {

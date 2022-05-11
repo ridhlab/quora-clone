@@ -40,7 +40,7 @@ const Login = () => {
 
     const { GET_USER_FOR_AUTH } = userQuery;
 
-    const [getUserForAuth, { data: users, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH, {
+    const [getUserForAuth, { data: users }] = useLazyQuery(GET_USER_FOR_AUTH, {
         onCompleted: (data) => {
             const { users: usersData } = data;
             checkAuthValid(usersData);
