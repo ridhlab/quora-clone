@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
 import { Box, Text } from "@chakra-ui/react";
+
+// React router
 import { useParams } from "react-router-dom";
 
-import { useLazyQuery } from "@apollo/client";
-import questionQuery from "../../../../GraphQL/question/query";
+// Components
 import Question from "../../../../Components/Question";
 import LineSeparator from "../../../../Components/LineSeparator";
+
+// GraphQL
+import { useLazyQuery } from "@apollo/client";
+import questionQuery from "../../../../GraphQL/question/query";
 
 const SpaceQuestions = () => {
     const { spaceId } = useParams();
@@ -21,10 +26,6 @@ const SpaceQuestions = () => {
             },
         });
     }, []);
-
-    useEffect(() => {
-        console.log(questions, loading, error);
-    }, [questions, loading, error]);
 
     return (
         <Box>

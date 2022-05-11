@@ -1,20 +1,33 @@
 import React, { useEffect } from "react";
 import styles from "./style.module.css";
-import { Box, Button, Container, Flex, Text, UnorderedList } from "@chakra-ui/react";
+import { Box, Container, Flex, Text, UnorderedList } from "@chakra-ui/react";
+
+// React Router
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+
+// Components
+import Logo from "../Logo";
+import NavItem from "./NavItem";
+import LoginButton from "../LoginButton";
+import ProfileButton from "../ProfileButton";
+
+// Icons
 import GroupIcon from "../Icon/Group";
 import HomeIcon from "../Icon/Home";
 import PenIcon from "../Icon/Pen";
-import Logo from "../Logo";
-import NavItem from "./NavItem";
+
+// Store
 import { useSelector, useDispatch } from "react-redux";
-import userQuery from "../../GraphQL/user/query";
-import { useLazyQuery } from "@apollo/client";
-import LoginButton from "../LoginButton";
-import ProfileButton from "../ProfileButton";
 import { SET_LOGIN_FALSE } from "../../store/auth/action";
 
+// GraphQL
+import userQuery from "../../GraphQL/user/query";
+import { useLazyQuery } from "@apollo/client";
+
+// Hooks
 import useTokenValid from "../../hooks/useTokenValid";
+
+// Module
 import { removeAuth } from "../../auth/auth";
 
 const Navbar = React.memo(() => {
@@ -52,7 +65,6 @@ const Navbar = React.memo(() => {
 
     useEffect(() => {
         if (username !== "") {
-            console.log("kesini", username);
             getUserByUsername({
                 variables: {
                     username: username,
@@ -95,15 +107,9 @@ const Navbar = React.memo(() => {
                                 display="none"
                             >
                                 <Text fontSize={14}>
-                                    {/* {pathname === "/" || pathname === "/question" || pathname === "/space" ? ( */}
                                     <Link to={`/user/${data.users[0].username}/answers`} className="link-underline">
                                         Profile
                                     </Link>
-                                    {/* // ) : ( //{" "}
-                                    <a href={`/user/${data.users[0].username}/answers`} className="link-underline">
-                                        // Profile //{" "}
-                                    </a>
-                                    // )} */}
                                 </Text>
                                 <Box h=".5px" bgColor="gray.300" />
                                 <Text fontSize={14}>

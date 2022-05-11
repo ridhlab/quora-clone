@@ -1,41 +1,55 @@
-import { useEffect, useState } from "react";
-import { Box, Container, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/react";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { Link, useLocation } from "react-router-dom";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/react";
+
+// React router
+import { Link } from "react-router-dom";
+
+// Components
+import Layout from "../../Components/Layout";
 import Answer from "../../Components/Answer";
 import Card from "../../Components/Card";
-import Layout from "../../Components/Layout";
+import QuestionForm from "../../Components/QuestionForm";
 
-import { useSelector, useDispatch } from "react-redux";
-import { SET_LOADING_AUTH_FALSE, SET_LOADING_AUTH_TRUE, SET_LOGIN_TRUE } from "../../store/auth/action";
+// Store
+import { useSelector } from "react-redux";
 
+// GraphQL
+import { useLazyQuery, useMutation } from "@apollo/client";
 import answerQuery from "../../GraphQL/answer/query";
 import questionQuery from "../../GraphQL/question/query";
 import spaceQuery from "../../GraphQL/space/query";
 import userQuery from "../../GraphQL/user/query";
 import questionMutation from "../../GraphQL/question/mutation";
 
+// Hooks
 import useTokenValid from "../../hooks/useTokenValid";
-import QuestionForm from "../../Components/QuestionForm";
+
+// Library
+import Swal from "sweetalert2";
 
 const Home = () => {
-    const dispatch = useDispatch();
+    const [user, setUser] = useState({});
 
     const { isLogin, username: usernameStore, isLoadingAuth } = useSelector((state) => state.authReducer);
 
-    const [user, setUser] = useState({});
     const { GET_ANSWERS } = answerQuery;
+
     const { GET_QUESTIONS } = questionQuery;
+
     const { GET_SPACES } = spaceQuery;
-    const { GET_USER_FOR_AUTH, GET_USER_BY_USERNAME } = userQuery;
+
+    const { GET_USER_BY_USERNAME } = userQuery;
+
     const { ADD_QUESTION_WITHOUT_SPACE, ADD_QUESTION_WITH_SPACE } = questionMutation;
 
-    const { checkTokenValid, isTokenValid } = useTokenValid();
+    const { isTokenValid } = useTokenValid();
 
-    const [getAnswers, { data: answers, error: errorAnswers, loading: loadingAnswers, refetch }] = useLazyQuery(GET_ANSWERS);
-    const [getQuestions, { data: questions, error: errorQuestions, loading: loadingQuestions }] = useLazyQuery(GET_QUESTIONS);
-    const [getSpaces, { data: spaces, error: errorSpaces, loading: loadingSpaces }] = useLazyQuery(GET_SPACES);
+    const [getAnswers, { data: answers, refetch }] = useLazyQuery(GET_ANSWERS);
+
+    const [getQuestions, { data: questions }] = useLazyQuery(GET_QUESTIONS);
+
+    const [getSpaces, { data: spaces }] = useLazyQuery(GET_SPACES);
+
     const [getUserBysername, { data: users, loading: loadingUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
         onCompleted: (data) => {
             setUser(data.users);
@@ -45,14 +59,12 @@ const Home = () => {
     const [addQuestionWithoutSpace] = useMutation(ADD_QUESTION_WITHOUT_SPACE, {
         onCompleted: (data) => {
             showAlertSuccessQuestion();
-            console.log(data);
         },
     });
 
     const [addQuestionWithSpace] = useMutation(ADD_QUESTION_WITH_SPACE, {
         onCompleted: (data) => {
             showAlertSuccessQuestion();
-            console.log(data);
         },
     });
 
@@ -63,7 +75,6 @@ const Home = () => {
     const handleSubmitQuestion = (question, spaceId, userId) => {
         if (question !== "") {
             if (spaceId === "Publik") {
-                console.log(question, spaceId, userId);
                 addQuestionWithoutSpace({
                     variables: {
                         question,
@@ -83,26 +94,6 @@ const Home = () => {
     };
 
     useEffect(() => {
-        console.log("isTokenValid", isTokenValid);
-    }, [isTokenValid]);
-
-    useEffect(() => {
-        console.log(answers);
-    }, [answers]);
-
-    useEffect(() => {
-        console.log(questions);
-    }, [questions]);
-
-    useEffect(() => {
-        console.log(spaces);
-    }, [spaces]);
-
-    useEffect(() => {
-        console.log(isLogin, usernameStore, isLoadingAuth);
-    }, [isLogin, usernameStore, isLoadingAuth]);
-
-    useEffect(() => {
         if (usernameStore !== "") {
             getUserBysername({
                 variables: {
@@ -117,10 +108,6 @@ const Home = () => {
         getQuestions();
         getSpaces();
     }, []);
-
-    console.log(isLogin, usernameStore);
-
-    console.log(loadingUser, users);
 
     return (
         <Layout>
@@ -165,7 +152,6 @@ const Home = () => {
                             />
                         </Card>
                     )}
-
                     {answers?.answers.map((answer, idx) => {
                         const { upvote_count, downvote_count, id } = answer;
                         const { profile_picture, username, name, id: userId } = answer.user;

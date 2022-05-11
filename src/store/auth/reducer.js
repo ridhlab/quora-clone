@@ -23,17 +23,6 @@ const authReducer = (state = initState, action) => {
                 userId: "",
                 username: "",
             };
-        case "auth/setLoadingAuthTrue":
-            return {
-                ...state,
-                isLoadingAuth: true,
-            };
-        case "auth/setLoadingAuthFalse":
-            console.log("reducer");
-            return {
-                ...state,
-                isLoadingAuth: false,
-            };
         default:
             return state;
     }

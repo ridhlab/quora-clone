@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Heading, Modal, Text, useDisclosure } from "@chakra-ui/react";
+
+// React router
 import { useParams } from "react-router-dom";
+
+// Components
 import Answer from "../../../Components/Answer";
 import ButtonWithIcon from "../../../Components/ButtonWithIcon";
 import Card from "../../../Components/Card";
 import Layout from "../../../Components/Layout";
+import LineSeparator from "../../../Components/LineSeparator";
+import ModalEdit from "../../../Components/ModalEdit";
+import ModalAnswer from "../../../Components/ModalAnswer";
+
+// Icons
 import { BiEdit } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
+
+// Store
+import { useSelector } from "react-redux";
+
+// GraphQL
 import { useLazyQuery, useMutation } from "@apollo/client";
 import answerQuery from "../../../GraphQL/answer/query";
 import answerMutation from "../../../GraphQL/answer/mutation";
 import questionQuery from "../../../GraphQL/question/query";
-import LineSeparator from "../../../Components/LineSeparator";
 import questionMutation from "../../../GraphQL/question/mutation";
-import ModalEdit from "../../../Components/ModalEdit";
-import ModalAnswer from "../../../Components/ModalAnswer";
-import { useSelector } from "react-redux";
+
+// Library
 import Swal from "sweetalert2";
 
 const QuestionDetail = () => {
@@ -30,9 +42,7 @@ const QuestionDetail = () => {
 
     const [valueAnswer, setValueAnswer] = useState("");
 
-    const { userId, username, isLogin } = useSelector((state) => state.authReducer);
-
-    // const [isEditQuestion, setIsEditQuestion] = useState(false);
+    const { userId, isLogin } = useSelector((state) => state.authReducer);
 
     const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
 
@@ -46,7 +56,7 @@ const QuestionDetail = () => {
 
     const { ADD_ANSWER } = answerMutation;
 
-    const [getAnswersByQuestionId, { data: answers, loading: loadingAnswers, error: errorAnswers }] = useLazyQuery(GET_ANSWERS_BY_QUESTION_ID);
+    const [getAnswersByQuestionId, { data: answers }] = useLazyQuery(GET_ANSWERS_BY_QUESTION_ID);
 
     const { GET_ASNWER_BY_QUESTION_ID_AND_USER_ID } = answerQuery;
 
@@ -55,14 +65,12 @@ const QuestionDetail = () => {
             if (data.answers.length !== 0) {
                 setCanAnswer(false);
             }
-            console.log(data);
         },
         refetchQueries: [GET_ANSWERS_BY_QUESTION_ID, "getAnswersByQuestionId"],
     });
 
-    const [getQuestionById, { data: question, loading: loadingQuestion, error: errorQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
+    const [getQuestionById, { data: question, loading: loadingQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
         onCompleted: (data) => {
-            console.log(data);
             setValueEditQuestion(data.questions_by_pk.question);
         },
     });
@@ -97,7 +105,6 @@ const QuestionDetail = () => {
     });
 
     const handleClickEdit = () => {
-        // onToggle();
         onOpenEdit();
         setIsOptClick(false);
     };
@@ -122,7 +129,6 @@ const QuestionDetail = () => {
     };
 
     const handleClickAnswer = () => {
-        console.log(valueAnswer);
         if (valueAnswer !== "") {
             addAnswer({
                 variables: {

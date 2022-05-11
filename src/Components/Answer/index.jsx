@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.css";
 import { Box, Button, Flex, Heading, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
+
+// React Router
 import { Link } from "react-router-dom";
+
+// Components
+import ProfileName from "../ProfileName";
+
+// Store
+import { useSelector } from "react-redux";
 
 // Icons
 import { BsThreeDots } from "react-icons/bs";
@@ -10,18 +18,12 @@ import { FiTrash2 } from "react-icons/fi";
 import Downvote from "../Icon/Downvote";
 import Upvote from "../Icon/Upvote";
 
-// Components
-import ProfileName from "../ProfileName";
-
 // GraphQL
 import answerMutation from "../../GraphQL/answer/mutation";
 import answerQuery from "../../GraphQL/answer/query";
 import { upvoteQuery, downvoteQuery } from "../../GraphQL/upvote-downvote/query";
 import { upvoteMutation, downvoteMutation } from "../../GraphQL/upvote-downvote/mutation";
 import { useLazyQuery, useMutation } from "@apollo/client";
-
-// Store
-import { useSelector } from "react-redux";
 
 // Library
 import Swal from "sweetalert2";

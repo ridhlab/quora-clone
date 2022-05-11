@@ -57,15 +57,6 @@ const questionQuery = {
             }
         }
     `,
-    // GET_SPACE_FROM_QUESTION: gql`
-    //     query getSpaceFromQuestion($question_id: Int!) {
-    //         questions_by_pk(id: $question_id) {
-    //             id
-    //             question
-    //             space_id
-    //         }
-    //     }
-    // `,
 };
 
 export default questionQuery;

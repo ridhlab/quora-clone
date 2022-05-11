@@ -1,19 +1,28 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { Box, Flex, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, useDisclosure, ModalCloseButton } from "@chakra-ui/react";
-import Layout from "../../Components/Layout";
+
+// React router
 import { Link } from "react-router-dom";
+
+// COmponents
+import Layout from "../../Components/Layout";
 import Card from "../../Components/Card";
+
+// Icons
 import { IoMdAddCircle } from "react-icons/io";
 
+// Store
+import { useSelector } from "react-redux";
+
+// GraphQL
 import { useLazyQuery, useMutation } from "@apollo/client";
 import spaceQuery from "../../GraphQL/space/query";
 import spaceMutation from "../../GraphQL/space/mutation";
 
-import { useSelector } from "react-redux";
-
 const Space = () => {
     const [nameValue, setNameValue] = useState("");
+
     const [descValue, setDescValue] = useState("");
 
     const { GET_SPACES } = spaceQuery;
@@ -24,19 +33,17 @@ const Space = () => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const [getSpaces, { data: spaces, loading, error }] = useLazyQuery(GET_SPACES);
+    const [getSpaces, { data: spaces }] = useLazyQuery(GET_SPACES);
 
     const [addSpace] = useMutation(ADD_SPACE, {
         onCompleted: (data) => {
             onClose();
-            console.log(data);
         },
         refetchQueries: [GET_SPACES, "getSpaces"],
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(nameValue, descValue);
         addSpace({
             variables: {
                 name: nameValue,

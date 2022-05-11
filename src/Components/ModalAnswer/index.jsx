@@ -1,6 +1,6 @@
+import React from "react";
 import styles from "./style.module.css";
 import { ModalBody, ModalOverlay, ModalContent, ModalHeader, Flex, Button, Box } from "@chakra-ui/react";
-import React from "react";
 
 const ModalAnswer = React.memo(({ question, handleClickCloseAnswer, handleClickAnswer, setValueAnswer }) => {
     return (

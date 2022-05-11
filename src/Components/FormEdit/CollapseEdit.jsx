@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Collapse } from "@chakra-ui/react";
 import styles from "./style.module.css";
+import { Button, Collapse } from "@chakra-ui/react";
 
 const CollapseEdit = React.memo(({ isOpen, onToggle, setIsEdit, isEdit, valueEdit, setValueEdit, editName, handleEdit }) => {
     const handleSubmit = (e) => {
@@ -45,4 +45,5 @@ const CollapseEdit = React.memo(({ isOpen, onToggle, setIsEdit, isEdit, valueEdi
         </Collapse>
     );
 });
+
 export default CollapseEdit;

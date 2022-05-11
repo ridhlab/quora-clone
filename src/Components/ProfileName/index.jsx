@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 
 const ProfileName = React.memo(({ profilePicture, username, name }) => {
-    console.log("Prifle name kesini");
     return (
         <Flex alignItems="center">
             <Box>

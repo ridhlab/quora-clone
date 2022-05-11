@@ -11,10 +11,9 @@ const useTokenValid = () => {
 
     const { GET_USER_FOR_AUTH } = userQuery;
 
-    const [getUserForAuth, { data, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH, {
+    const [getUserForAuth] = useLazyQuery(GET_USER_FOR_AUTH, {
         onCompleted: (data) => {
             const { users } = data;
-            console.log(users);
             if (users.length === 1) {
                 dispatch(SET_LOGIN_TRUE(users[0].id, users[0].username));
                 setIsTokenValid(true);
@@ -31,7 +30,9 @@ const useTokenValid = () => {
                     },
                 });
             }
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return { checkTokenValid, isTokenValid };

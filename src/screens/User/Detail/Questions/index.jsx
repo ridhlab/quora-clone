@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { Box, Text } from "@chakra-ui/react";
 
-import { useLazyQuery } from "@apollo/client";
-import questionQuery from "../../../../GraphQL/question/query";
+// React router
+import { useParams } from "react-router-dom";
+
+// Components
 import Question from "../../../../Components/Question";
 import LineSeparator from "../../../../Components/LineSeparator";
+
+// GraphQL
+import { useLazyQuery } from "@apollo/client";
+import questionQuery from "../../../../GraphQL/question/query";
 
 const UserQuestions = () => {
     const { username } = useParams();
@@ -21,10 +26,6 @@ const UserQuestions = () => {
             },
         });
     }, []);
-
-    useEffect(() => {
-        console.log(questions, loading, error);
-    }, [questions, loading, error]);
 
     return (
         <Box>

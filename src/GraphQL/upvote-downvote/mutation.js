@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 
 const upvoteMutation = {
+    // Upvote
     ADD_UPVOTE: gql`
         mutation addUpvote($answer_id: Int!, $user_id: Int!) {
             insert_upvote_one(object: { answer_id: $answer_id, user_id: $user_id }) {
@@ -26,6 +27,7 @@ const upvoteMutation = {
 };
 
 const downvoteMutation = {
+    // Downvote
     ADD_DOWNVOTE: gql`
         mutation addDownvote($answer_id: Int!, $user_id: Int!) {
             insert_downvote_one(object: { answer_id: $answer_id, user_id: $user_id }) {

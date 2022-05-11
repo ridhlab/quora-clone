@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@chakra-ui/react";
 
 const WrapperBtnWithIcon = ({ children, canClick }) => {
@@ -19,8 +20,8 @@ const WrapperBtnWithIcon = ({ children, canClick }) => {
     );
 };
 
-export default WrapperBtnWithIcon;
-
 WrapperBtnWithIcon.defaultProps = {
     canClick: true,
 };
+
+export default WrapperBtnWithIcon;

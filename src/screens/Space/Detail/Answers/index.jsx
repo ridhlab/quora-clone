@@ -1,18 +1,23 @@
 import React, { useEffect } from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
-import Answer from "../../../../Components/Answer";
 
+// React router
+import { useParams } from "react-router-dom";
+
+// Components
+import Answer from "../../../../Components/Answer";
+import LineSeparator from "../../../../Components/LineSeparator";
+
+// GraphQL
 import { useLazyQuery } from "@apollo/client";
 import answerQuery from "../../../../GraphQL/answer/query";
-import LineSeparator from "../../../../Components/LineSeparator";
 
 const SpaceAnswers = () => {
     const { spaceId } = useParams();
 
     const { GET_ANSWERS_BY_SPACE_ID } = answerQuery;
 
-    const [getAnswersBySpaceId, { data: answers, loading, error }] = useLazyQuery(GET_ANSWERS_BY_SPACE_ID);
+    const [getAnswersBySpaceId, { data: answers }] = useLazyQuery(GET_ANSWERS_BY_SPACE_ID);
 
     useEffect(() => {
         getAnswersBySpaceId({

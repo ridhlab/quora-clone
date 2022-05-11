@@ -7,7 +7,7 @@ const useUsernameExist = () => {
 
     const { GET_USER_FOR_AUTH } = userQuery;
 
-    const [getUserForAuth, { data, loading, error }] = useLazyQuery(GET_USER_FOR_AUTH, {
+    const [getUserForAuth] = useLazyQuery(GET_USER_FOR_AUTH, {
         onCompleted: (data) => {
             const { users } = data;
             console.log(users);

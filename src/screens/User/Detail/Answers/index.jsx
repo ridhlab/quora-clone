@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { Box, Text } from "@chakra-ui/react";
-import Answer from "../../../../Components/Answer";
-import LineSeparator from "../../../../Components/LineSeparator";
+
+// React Router
 import { useParams } from "react-router-dom";
 
+// Components
+import Answer from "../../../../Components/Answer";
+import LineSeparator from "../../../../Components/LineSeparator";
+
+// GraphQL
 import { useLazyQuery } from "@apollo/client";
 import answerQuery from "../../../../GraphQL/answer/query";
 
@@ -12,7 +17,7 @@ const UserAnswers = () => {
 
     const { GET_ANSWERS_BY_USERNAME } = answerQuery;
 
-    const [getAnswersByUsername, { data: answers, loading, error }] = useLazyQuery(GET_ANSWERS_BY_USERNAME);
+    const [getAnswersByUsername, { data: answers }] = useLazyQuery(GET_ANSWERS_BY_USERNAME);
 
     useEffect(() => {
         getAnswersByUsername({

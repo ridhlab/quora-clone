@@ -3,10 +3,8 @@ import styles from "./style.module.css";
 import { Box, Button, Flex } from "@chakra-ui/react";
 
 const QuestionForm = React.memo(({ userId, profilePicture, username, spaces, handleClick }) => {
-    console.log("question form");
     const [spaceIdSelected, setSpaceIdSelected] = useState("Publik");
     const [questionValue, setQuestionValue] = useState("");
-    console.log(spaceIdSelected, questionValue);
     return (
         <>
             <Box fontSize={13}>

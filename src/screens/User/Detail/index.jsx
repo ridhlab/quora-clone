@@ -1,26 +1,38 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { Box, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+
+// React router
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+
+// Components
 import Layout from "../../../Components/Layout";
 import Card from "../../../Components/Card";
 import Tab from "../../../Components/Tab";
+import CollapseEdit from "../../../Components/FormEdit/CollapseEdit";
+import EditIcon from "../../../Components/FormEdit/EditIcon";
+import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
+import ButtonWithIcon from "../../../Components/ButtonWithIcon";
 
-import { useDropzone } from "react-dropzone";
+// Icons
+import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 
+// Store
+import { useSelector } from "react-redux";
+
+// GraphQL
 import { useLazyQuery, useMutation } from "@apollo/client";
 import userQuery from "../../../GraphQL/user/query";
 import userMutation from "../../../GraphQL/user/mutation";
 
-import { useSelector } from "react-redux";
-import CollapseEdit from "../../../Components/FormEdit/CollapseEdit";
-import EditIcon from "../../../Components/FormEdit/EditIcon";
-
+// Hooks
 import useUsernameExist from "../../../hooks/useUsernameExist";
-import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
+
+// Module
 import { setAuth } from "../../../auth/auth";
-import ButtonWithIcon from "../../../Components/ButtonWithIcon";
+
+// Library
+import { useDropzone } from "react-dropzone";
 
 const User = () => {
     const { username: usernameParams } = useParams();
@@ -75,14 +87,13 @@ const User = () => {
 
     const { GET_USER_BY_USERNAME } = userQuery;
 
-    const [getUserByUsername, { data: dataUser, loading, error }] = useLazyQuery(GET_USER_BY_USERNAME, {
+    const [getUserByUsername, { data: dataUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
         onCompleted: (data) => {
             setUser(data.users[0]);
             setValueNameEdit(data.users[0].name);
             setValueUsernameEdit(data.users[0].username);
             setBase64ImgProfile(data.users[0].profile_picture);
             if (data.users[0].bio === null) {
-                console.log("kesini wiy");
                 setValueBioEdit("");
             } else {
                 setValueBioEdit(data.users[0].bio);
@@ -99,9 +110,7 @@ const User = () => {
     const [updateUsernameUser] = useMutation(UPDATE_USERNAME_USER, {
         refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
         onCompleted: (data) => {
-            console.log(data);
             setAuth(btoa(data.update_users.returning[0].username));
-            // navigate(`/user/${data.update_users.returning[0].username}/answers`);
             window.location.pathname = `/user/${data.update_users.returning[0].username}/answers`;
         },
     });
@@ -112,9 +121,6 @@ const User = () => {
 
     const [updateProfilePictureUser] = useMutation(UPDATE_PROFILE_PICTURE_USER, {
         refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
-        onCompleted: (data) => {
-            // console.log(data);
-        },
     });
 
     const getBase64 = (file) => {
@@ -162,7 +168,6 @@ const User = () => {
         }
         if (editName === "username") {
             checkUsernameExist(value);
-            console.log(value, editName);
         }
         if (editName === "bio") {
             updateBioUser({
@@ -171,12 +176,10 @@ const User = () => {
                     newBio: value,
                 },
             });
-            console.log(value, editName);
         }
     };
 
     const handleClickEditPicture = () => {
-        console.log(base64ImgProfile);
         updateProfilePictureUser({
             variables: {
                 username,
@@ -186,9 +189,7 @@ const User = () => {
     };
 
     useEffect(() => {
-        console.log("isUsernameExistHooks", isUsernameExistHooks);
         if (isUsernameExistHooks !== "") {
-            console.log("isUsernameExistHooks", isUsernameExistHooks);
             if (isUsernameExistHooks) {
                 setIsUsernameExist(true);
             } else {
@@ -198,7 +199,6 @@ const User = () => {
                         newUsername: valueUsernameEdit,
                     },
                 });
-                console.log("username bisa dipakai", valueUsernameEdit);
             }
         }
     }, [isUsernameExistHooks]);
@@ -213,7 +213,6 @@ const User = () => {
     }, [isUsernameExist]);
 
     useEffect(() => {
-        console.log("kesini woyyyyy");
         checkPath();
         getUserByUsername({
             variables: {
@@ -221,11 +220,6 @@ const User = () => {
             },
         });
     }, [usernameParams]);
-
-    useEffect(() => {
-        console.log("isLogin", isLogin);
-        console.log(usernameParams, usernameStore);
-    }, [isLogin, usernameStore]);
 
     useEffect(() => {
         if (!isEditName) {
@@ -249,12 +243,6 @@ const User = () => {
         }
     }, [isEditBio]);
 
-    useEffect(() => {
-        console.log(base64ImgProfile, "base64img");
-    }, [base64ImgProfile]);
-
-    console.log("valueBioEdit", valueBioEdit);
-    console.log("bio", bio);
     return (
         <Layout>
             <Box maxW={500} margin="auto">
@@ -415,7 +403,6 @@ const User = () => {
                                             ""
                                         )}
                                     </Box>
-
                                     <CollapseEdit
                                         isOpen={isOpenBio}
                                         onToggle={onToggleBio}

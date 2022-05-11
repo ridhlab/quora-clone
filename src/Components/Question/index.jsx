@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text, useDisclosure, Modal, ModalOverlay } from "@chakra-ui/react";
+import { Box, Flex, Text, useDisclosure, Modal } from "@chakra-ui/react";
+
+// React Router
 import { Link, useNavigate } from "react-router-dom";
+
+// Components
+import ButtonWithIcon from "../ButtonWithIcon";
+import ModalEdit from "../ModalEdit";
+import ModalAnswer from "../ModalAnswer";
+
+// Icons
 import { BiEdit } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
 import { BsThreeDots } from "react-icons/bs";
-import ButtonWithIcon from "../ButtonWithIcon";
+
+// Store
+import { useSelector } from "react-redux";
+
+// GraphQL
+import { useLazyQuery, useMutation } from "@apollo/client";
 import questionMutation from "../../GraphQL/question/mutation";
 import answerMutation from "../../GraphQL/answer/mutation";
 import questionQuery from "../../GraphQL/question/query";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import ModalEdit from "../ModalEdit";
-import ModalAnswer from "../ModalAnswer";
-import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import answerQuery from "../../GraphQL/answer/query";
+
+// Library
+import Swal from "sweetalert2";
 
 const Question = React.memo(({ answerCount, questionId, question, spaceId, answers, userId }) => {
     const [isOptClick, setIsOptClick] = useState(false);
@@ -28,7 +40,7 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
 
     const { isOpen: isOpenAnswer, onOpen: onOpenAnswer, onClose: onCloseAnswer } = useDisclosure();
 
-    const { isLogin, username, userId: userIdStore } = useSelector((state) => state.authReducer);
+    const { isLogin, userId: userIdStore } = useSelector((state) => state.authReducer);
 
     const navigate = useNavigate();
 
@@ -42,11 +54,9 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
 
     const [getAnswerByQuestionIdAndUserId] = useLazyQuery(GET_ASNWER_BY_QUESTION_ID_AND_USER_ID, {
         onCompleted: (data) => {
-            // console.log(data);
             if (data.answers.length !== 0) {
                 setCanAnswer(false);
             }
-            console.log(data);
         },
     });
 
@@ -68,7 +78,6 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
 
     const [addAnswer] = useMutation(ADD_ANSWER, {
         onCompleted: () => {
-            console.log("kesini");
             onCloseAnswer();
             new Promise((resolve, reject) => {
                 resolve(
@@ -120,7 +129,6 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
                 },
             });
         }
-        console.log("kesini", userId);
     };
 
     useEffect(() => {
@@ -133,11 +141,6 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
             });
         }
     }, []);
-    console.log(spaceId, isLogin);
-
-    // console.log(q)
-
-    // console.log(isLogin, username, userId);
 
     return (
         <>

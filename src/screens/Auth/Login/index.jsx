@@ -1,17 +1,28 @@
+import React, { useEffect, useState } from "react";
 import styles from "../style.module.css";
-import { useEffect, useState } from "react";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
+
+// React Router
+import { Link, useNavigate } from "react-router-dom";
+
+// Components
 import Card from "../../../Components/Card";
 import Logo from "../../../Components/Logo";
-import { Link, useNavigate } from "react-router-dom";
 import WrapperAuth from "../../../Components/WrapperAuth";
-import bcrypt from "bcryptjs";
-import CryptoJS from "crypto-js";
+import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
+
+// Icons
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+
+// GraphQL
 import userQuery from "../../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
-import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
+
+// Module
 import { setAuth } from "../../../auth/auth";
+
+// Library
+import bcrypt from "bcryptjs";
 
 const Login = () => {
     const [passVisibility, setPassVisibility] = useState(false);
@@ -59,8 +70,6 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("kesini");
-        console.log(users);
         if (value.username === users?.users[0]?.username) {
             checkAuthValid(users.users);
         }
@@ -86,20 +95,6 @@ const Login = () => {
             }, 1500);
         }
     }, [isPasswordValid]);
-
-    useEffect(() => {
-        console.log(users, loading, error);
-    }, [users, loading, error]);
-
-    // useEffect(() => {
-    //     const encrypt = CryptoJS.AES.encrypt("dharidwan", "6d090796-ecdf-11ea-adc1-0242ac112345");
-    //     const decrypt = CryptoJS.AES.decrypt(encrypt, "6d090796-ecdf-11ea-adc1-0242ac112345'");
-    //     console.log(encrypt.toString());
-    //     console.log(decrypt.toString());
-    //     const base64enc = btoa("dharidwan");
-    //     const base64dec = atob(base64enc);
-    //     console.log(base64dec, base64enc);
-    // }, []);
 
     return (
         <WrapperAuth>
@@ -142,7 +137,9 @@ const Login = () => {
                             )}
                         </Box>
                     </Box>
+
                     {!isUsernameExist && <ErrorMessageWithCard message="Username yang anda masukkan tidak tersedia" />}
+
                     {!isPasswordValid && <ErrorMessageWithCard message="Password yang anda masukkan salah" />}
 
                     <Button type="submit" w="100%" mt={2} bgColor="primary.index" color="white" _hover={{ bgColor: "primary.hover" }}>
