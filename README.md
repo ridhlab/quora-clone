@@ -4,14 +4,14 @@ This is my submission project in MSIB Batch 2 Alterra Academy. The project is cl
 
 ## Features
 
-:white_check_mark: Authentication
-:white_check_mark: Update user profile (name, username, bio, profile picture)
-:white_check_mark: Add auestion, Edit auestion
-:white_check_mark: Add answer, Edit answer, Delete Answer
-:white_check_mark: Upvote and Downvote
-:white_check_mark: Public space
-:white_check_mark: Create public space, Update public space (name, description, space picture)
-:white_check_mark: Some authorization
+:white_check_mark: Authentication <br/>
+:white_check_mark: Update user profile (name, username, bio, profile picture) <br/>
+:white_check_mark: Add question, Edit question <br/>
+:white_check_mark: Add answer, Edit answer, Delete Answer <br/>
+:white_check_mark: Upvote and Downvote <br/>
+:white_check_mark: Public space <br/>
+:white_check_mark: Create public space, Update public space (name, description, space picture) <br/>
+:white_check_mark: Some authorization <br/>
 
 ## Technology Used 
 - ReactJS
