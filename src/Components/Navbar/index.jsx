@@ -3,7 +3,7 @@ import styles from "./style.module.css";
 import { Box, Container, Flex, Text, UnorderedList } from "@chakra-ui/react";
 
 // React Router
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import Logo from "../Logo";
@@ -24,9 +24,6 @@ import { SET_LOGIN_FALSE } from "../../store/auth/action";
 import userQuery from "../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
 
-// Hooks
-import useTokenValid from "../../hooks/useTokenValid";
-
 // Module
 import { removeAuth } from "../../auth/auth";
 
@@ -36,10 +33,6 @@ const Navbar = React.memo(() => {
     const dispatch = useDispatch();
 
     const { pathname } = useLocation();
-
-    const { username: usernameParams } = useParams();
-
-    const { checkTokenValid } = useTokenValid();
 
     const { GET_USER_BY_USERNAME } = userQuery;
 
@@ -53,16 +46,6 @@ const Navbar = React.memo(() => {
         navigate("/");
     };
 
-    const getLocalStorage = () => {
-        if (localStorage.getItem("userToken")) {
-            const lStorage = JSON.parse(localStorage.getItem("userToken"));
-            const { token } = lStorage;
-            return token;
-        } else {
-            return null;
-        }
-    };
-
     useEffect(() => {
         if (username !== "") {
             getUserByUsername({
@@ -72,12 +55,6 @@ const Navbar = React.memo(() => {
             });
         }
     }, [username]);
-
-    useEffect(() => {
-        if (getLocalStorage() !== null) {
-            checkTokenValid(getLocalStorage());
-        }
-    }, [usernameParams]);
 
     return (
         <Box bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)" py={2} position="sticky" top={0} zIndex={99}>

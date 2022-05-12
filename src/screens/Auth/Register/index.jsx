@@ -58,6 +58,9 @@ const Register = () => {
             setAuth(btoa(username));
             navigate("/");
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const checkNameValid = (name) => {

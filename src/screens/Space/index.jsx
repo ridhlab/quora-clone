@@ -39,6 +39,9 @@ const Space = () => {
         onCompleted: (data) => {
             onClose();
         },
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_SPACES, "getSpaces"],
     });
 

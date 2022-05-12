@@ -4,20 +4,23 @@ import userQuery from "../GraphQL/user/query";
 import { useDispatch } from "react-redux";
 import { SET_LOGIN_TRUE } from "../store/auth/action";
 
-const useTokenValid = () => {
+const useAuth = () => {
     const [isTokenValid, setIsTokenValid] = useState(false);
 
     const dispatch = useDispatch();
 
     const { GET_USER_FOR_AUTH } = userQuery;
 
-    const [getUserForAuth] = useLazyQuery(GET_USER_FOR_AUTH, {
+    const [getUserForAuth, { loading }] = useLazyQuery(GET_USER_FOR_AUTH, {
         onCompleted: (data) => {
             const { users } = data;
             if (users.length === 1) {
                 dispatch(SET_LOGIN_TRUE(users[0].id, users[0].username));
                 setIsTokenValid(true);
             }
+        },
+        onError: (err) => {
+            console.log(err);
         },
     });
 
@@ -35,7 +38,7 @@ const useTokenValid = () => {
         }
     };
 
-    return { checkTokenValid, isTokenValid };
+    return { checkTokenValid, isTokenValid, loading };
 };
 
-export default useTokenValid;
+export default useAuth;

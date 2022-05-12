@@ -21,9 +21,6 @@ import spaceQuery from "../../GraphQL/space/query";
 import userQuery from "../../GraphQL/user/query";
 import questionMutation from "../../GraphQL/question/mutation";
 
-// Hooks
-import useTokenValid from "../../hooks/useTokenValid";
-
 // Library
 import Swal from "sweetalert2";
 
@@ -42,8 +39,6 @@ const Home = () => {
 
     const { ADD_QUESTION_WITHOUT_SPACE, ADD_QUESTION_WITH_SPACE } = questionMutation;
 
-    const { isTokenValid } = useTokenValid();
-
     const [getAnswers, { data: answers, refetch }] = useLazyQuery(GET_ANSWERS);
 
     const [getQuestions, { data: questions }] = useLazyQuery(GET_QUESTIONS);
@@ -54,17 +49,26 @@ const Home = () => {
         onCompleted: (data) => {
             setUser(data.users);
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const [addQuestionWithoutSpace] = useMutation(ADD_QUESTION_WITHOUT_SPACE, {
         onCompleted: (data) => {
             showAlertSuccessQuestion();
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const [addQuestionWithSpace] = useMutation(ADD_QUESTION_WITH_SPACE, {
         onCompleted: (data) => {
             showAlertSuccessQuestion();
+        },
+        onError: (err) => {
+            console.log(err);
         },
     });
 

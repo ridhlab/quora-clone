@@ -45,6 +45,9 @@ const Login = () => {
             const { users: usersData } = data;
             checkAuthValid(usersData);
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const checkisPasswordExact = async (passwInput, passwDb) => {

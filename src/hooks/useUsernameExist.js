@@ -18,6 +18,9 @@ const useUsernameExist = () => {
                 }
             }
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const checkUsernameExist = (username) => {

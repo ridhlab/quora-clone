@@ -43,7 +43,7 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
 
     const [valueAnswerEdit, setValueAnswerEdit] = useState(question);
 
-    const { isLogin, username: usernameStore, userId: userIdStore } = useSelector((state) => state.authReducer);
+    const { isLogin, userId: userIdStore } = useSelector((state) => state.authReducer);
 
     const { EDIT_ANSWER_BY_ID, DELETE_ANSWER } = answerMutation;
 
@@ -69,6 +69,9 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
                 setUpvoteCount("");
             }
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const [getDownvoteByAnswerId] = useLazyQuery(GET_DOWNVOTE_BY_ANSWER_ID, {
@@ -83,9 +86,15 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
                 setDownvoteCount("");
             }
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const [addUpvote] = useMutation(ADD_UPVOTE, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_UPVOTE_BY_ANSWER_ID, "getUpvoteByAnswerId"],
     });
 
@@ -93,16 +102,25 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
         onCompleted: (data) => {
             setIsUpvote(false);
         },
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_UPVOTE_BY_ANSWER_ID, "getUpvoteByAnswerId"],
     });
 
     const [addDownvote] = useMutation(ADD_DOWNVOTE, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_DOWNVOTE_BY_ANSWER_ID, "getDownvoteByAnswerId"],
     });
 
     const [deleteDownvote] = useMutation(DELETE_DOWNVOTE, {
         onCompleted: (data) => {
             setIsDownvote(false);
+        },
+        onError: (err) => {
+            console.log(err);
         },
         refetchQueries: [GET_DOWNVOTE_BY_ANSWER_ID, "getDownvoteByAnswerId"],
     });
@@ -132,6 +150,9 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
             });
             setIsOptClick(false);
             refetch();
+        },
+        onError: (err) => {
+            console.log(err);
         },
         refetchQueries: [GET_ANSWERS_BY_QUESTION_ID, "getAnswersByQuestionId"],
     });
@@ -197,23 +218,24 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
     };
 
     useEffect(() => {
-        getUpvoteByAnswerId({
-            variables: {
-                answer_id: answerId,
-            },
-        });
-
-        getDownvoteByAnswerId({
-            variables: {
-                answer_id: answerId,
-            },
-        });
-
         if (!isLogin) {
             setIsUpvote(false);
             setIsDownvote(false);
         }
     }, [isLogin]);
+
+    useEffect(() => {
+        getUpvoteByAnswerId({
+            variables: {
+                answer_id: answerId,
+            },
+        });
+        getDownvoteByAnswerId({
+            variables: {
+                answer_id: answerId,
+            },
+        });
+    }, []);
 
     return (
         <>
