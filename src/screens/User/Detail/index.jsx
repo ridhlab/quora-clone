@@ -255,7 +255,7 @@ const User = () => {
                                         _hover={{
                                             bgColor: isLogin && usernameParams === usernameStore ? "gray.500" : "",
                                             cursor: isLogin && usernameParams === usernameStore ? "pointer" : "",
-                                            borderRadius: 50,
+                                            borderRadius: isLogin && usernameParams === usernameStore ? 50 : "",
                                         }}
                                         position="relative"
                                         className={styles.wrapperProfilePic}
@@ -295,7 +295,6 @@ const User = () => {
                                             fontSize={12}
                                             display="inline-block"
                                             p={1}
-                                            alignSelf="self-end"
                                             h="auto"
                                             bgColor="primary.index"
                                             color="white"
@@ -309,7 +308,6 @@ const User = () => {
                                             fontSize={12}
                                             display="inline-block"
                                             p={1}
-                                            alignSelf="self-end"
                                             h="auto"
                                             bgColor="gray.300"
                                             color="white"
