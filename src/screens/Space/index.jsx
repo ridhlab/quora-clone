@@ -44,12 +44,14 @@ const Space = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        addSpace({
-            variables: {
-                name: nameValue,
-                desc: descValue,
-            },
-        });
+        if (nameValue !== "" && descValue !== "") {
+            addSpace({
+                variables: {
+                    name: nameValue,
+                    desc: descValue,
+                },
+            });
+        }
     };
 
     const handleClose = () => {
@@ -71,7 +73,7 @@ const Space = () => {
                         <Card key={id}>
                             <Flex alignItems="center">
                                 <Box>
-                                    <img src={space_picture} width={76} alt={name} />
+                                    <img src={space_picture} width={76} alt={name} style={{ borderRadius: 50 }} />
                                 </Box>
                                 <Box ml={4}>
                                     <Text fontWeight={500}>

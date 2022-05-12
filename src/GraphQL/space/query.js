@@ -18,6 +18,7 @@ const spaceQuery = {
                 name
                 description
                 space_picture
+                user_id
                 questions {
                     id
                     question
