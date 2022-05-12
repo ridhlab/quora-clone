@@ -126,7 +126,7 @@ const Home = () => {
                                             <Link to={`/space/${id}/answers`} className="link-underline">
                                                 <ListItem key={space.id} listStyleType="none" display="flex" alignItems="center">
                                                     <Box>
-                                                        <img src={space_picture} width={24} alt={space} />
+                                                        <img src={space_picture} width={24} alt={space} style={{ borderRadius: 50 }} />
                                                     </Box>
                                                     <Text fontSize={13} mx={2}>
                                                         {name}
