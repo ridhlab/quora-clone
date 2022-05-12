@@ -72,7 +72,7 @@ const Space = () => {
                     return (
                         <Card key={id}>
                             <Flex alignItems="center">
-                                <Box>
+                                <Box minWidth={76}>
                                     <img src={space_picture} width={76} alt={name} style={{ borderRadius: 50 }} />
                                 </Box>
                                 <Box ml={4}>
