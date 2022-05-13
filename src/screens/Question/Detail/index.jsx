@@ -66,12 +66,18 @@ const QuestionDetail = () => {
                 setCanAnswer(false);
             }
         },
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_ANSWERS_BY_QUESTION_ID, "getAnswersByQuestionId"],
     });
 
     const [getQuestionById, { data: question, loading: loadingQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
         onCompleted: (data) => {
             setValueEditQuestion(data.questions_by_pk.question);
+        },
+        onError: (err) => {
+            console.log(err);
         },
     });
 
@@ -84,6 +90,9 @@ const QuestionDetail = () => {
                 showConfirmButton: false,
                 timer: 2500,
             });
+        },
+        onError: (err) => {
+            console.log(err);
         },
         refetchQueries: [
             [GET_QUESTIONS, "getQuestions"],
@@ -100,6 +109,9 @@ const QuestionDetail = () => {
                 showConfirmButton: false,
                 timer: 2500,
             });
+        },
+        onError: (err) => {
+            console.log(err);
         },
         refetchQueries: [GET_ANSWERS_BY_QUESTION_ID, "getAnswersByQuestionId"],
     });

@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 const spaceMutation = {
     ADD_SPACE: gql`
-        mutation addSpace($name: String!, $desc: String!) {
-            insert_spaces_one(object: { description: $desc, name: $name }) {
+        mutation addSpace($name: String!, $desc: String!, $user_id: Int!) {
+            insert_spaces_one(object: { description: $desc, name: $name, user_id: $user_id }) {
                 id
                 name
                 description

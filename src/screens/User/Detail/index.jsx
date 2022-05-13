@@ -29,7 +29,7 @@ import userMutation from "../../../GraphQL/user/mutation";
 import useUsernameExist from "../../../hooks/useUsernameExist";
 
 // Module
-import { setAuth } from "../../../auth/auth";
+import { setAuth } from "../../../util/auth";
 
 // Library
 import { useDropzone } from "react-dropzone";
@@ -99,27 +99,42 @@ const User = () => {
                 setValueBioEdit(data.users[0].bio);
             }
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const { UPDATE_NAME_USER, UPDATE_USERNAME_USER, UPDATE_BIO_USER, UPDATE_PROFILE_PICTURE_USER } = userMutation;
 
     const [updateNameUser] = useMutation(UPDATE_NAME_USER, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
     });
 
     const [updateUsernameUser] = useMutation(UPDATE_USERNAME_USER, {
-        refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
         onCompleted: (data) => {
             setAuth(btoa(data.update_users.returning[0].username));
             window.location.pathname = `/user/${data.update_users.returning[0].username}/answers`;
         },
+        onError: (err) => {
+            console.log(err);
+        },
+        refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
     });
 
     const [updateBioUser] = useMutation(UPDATE_BIO_USER, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
     });
 
     const [updateProfilePictureUser] = useMutation(UPDATE_PROFILE_PICTURE_USER, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_USER_BY_USERNAME, "getUserByUsername"],
     });
 

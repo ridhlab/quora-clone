@@ -80,17 +80,29 @@ const SpaceDetail = () => {
             setValueDescEdit(data.spaces_by_pk.description);
             setBase64ImgProfileSpace(data.spaces_by_pk.space_picture);
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const [updateNameSpace] = useMutation(UPDATE_NAME_SPACE, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_SPACE_BY_ID, "getSpaceById"],
     });
 
     const [updateDescSpace] = useMutation(UPDATE_DESC_SPACE, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_SPACE_BY_ID, "getSpaceById"],
     });
 
     const [updateSpacePicture] = useMutation(UPDATE_SPACE_PICTURE, {
+        onError: (err) => {
+            console.log(err);
+        },
         refetchQueries: [GET_SPACE_BY_ID, "getSpaceById"],
     });
 

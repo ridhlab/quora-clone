@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./screens/Home";
@@ -13,7 +14,7 @@ import SpaceQuestions from "./screens/Space/Detail/Questions";
 import Login from "./screens/Auth/Login";
 import Register from "./screens/Auth/Register";
 
-function App() {
+const App = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
@@ -39,6 +40,6 @@ function App() {
             <Route path="/register" element={<Register />} />
         </Routes>
     );
-}
+};
 
 export default App;

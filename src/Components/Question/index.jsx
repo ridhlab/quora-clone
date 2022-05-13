@@ -58,6 +58,9 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
                 setCanAnswer(false);
             }
         },
+        onError: (err) => {
+            console.log(err);
+        },
     });
 
     const [editQuestion] = useMutation(EDIT_QUESTION, {
@@ -69,6 +72,9 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
                 showConfirmButton: false,
                 timer: 2500,
             });
+        },
+        onError: (err) => {
+            console.log(err);
         },
         refetchQueries: [
             [GET_QUESTIONS, "getQuestions"],
@@ -91,6 +97,9 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
             }).then(() => {
                 navigate(`/question/${questionId}`);
             });
+        },
+        onError: (err) => {
+            console.log(err);
         },
     });
 

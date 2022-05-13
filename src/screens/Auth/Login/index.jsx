@@ -19,7 +19,7 @@ import userQuery from "../../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
 
 // Module
-import { setAuth } from "../../../auth/auth";
+import { setAuth } from "../../../util/auth";
 
 // Library
 import bcrypt from "bcryptjs";
@@ -44,6 +44,9 @@ const Login = () => {
         onCompleted: (data) => {
             const { users: usersData } = data;
             checkAuthValid(usersData);
+        },
+        onError: (err) => {
+            console.log(err);
         },
     });
 
