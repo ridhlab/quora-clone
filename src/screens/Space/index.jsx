@@ -66,7 +66,6 @@ const Space = () => {
 
     useEffect(() => {
         getSpaces();
-        console.log(userIdStore);
     }, []);
 
     return (
