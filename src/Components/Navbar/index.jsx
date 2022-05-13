@@ -25,7 +25,7 @@ import userQuery from "../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
 
 // Module
-import { removeAuth } from "../../auth/auth";
+import { removeAuth } from "../../util/auth";
 
 const Navbar = React.memo(() => {
     const navigate = useNavigate();

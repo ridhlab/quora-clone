@@ -29,7 +29,7 @@ const Space = () => {
 
     const { ADD_SPACE } = spaceMutation;
 
-    const { isLogin } = useSelector((state) => state.authReducer);
+    const { isLogin, userId: userIdStore } = useSelector((state) => state.authReducer);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,6 +52,7 @@ const Space = () => {
                 variables: {
                     name: nameValue,
                     desc: descValue,
+                    user_id: userIdStore,
                 },
             });
         }
@@ -65,6 +66,7 @@ const Space = () => {
 
     useEffect(() => {
         getSpaces();
+        console.log(userIdStore);
     }, []);
 
     return (
