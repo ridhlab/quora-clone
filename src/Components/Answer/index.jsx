@@ -276,10 +276,10 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
                 </Box>
             </Box>
             <Flex justifyContent="space-between" alignItems="center">
-                <Flex py={0} bgColor="rgba(0, 0, 0, 0.04)" borderRadius={50} fontSize={13}>
+                <Flex bgColor="rgba(0, 0, 0, 0.04)" borderRadius={50} fontSize={13}>
                     {isUpvote ? (
                         <Flex
-                            px={2}
+                            p={2}
                             alignItems="center"
                             cursor={isLogin ? "pointer" : ""}
                             _hover={{ bgColor: isLogin ? "blackAlpha.50" : "", borderRadius: "50% 0 0 50%" }}
@@ -290,7 +290,7 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
                         </Flex>
                     ) : (
                         <Flex
-                            px={2}
+                            p={2}
                             alignItems="center"
                             cursor={isLogin && !isDownvote ? "pointer" : "not-allowed"}
                             _hover={{ bgColor: isLogin && !isDownvote ? "blackAlpha.50" : "", borderRadius: "50% 0 0 50%" }}
