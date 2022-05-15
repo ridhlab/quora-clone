@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Flex, Text, useDisclosure, Modal } from "@chakra-ui/react";
 
 // React Router

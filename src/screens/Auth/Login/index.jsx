@@ -19,7 +19,7 @@ import userQuery from "../../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
 
 // Module
-import { setAuth } from "../../../util/auth";
+import { setAuth } from "../../../utils/auth";
 
 // Library
 import bcrypt from "bcryptjs";

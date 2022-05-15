@@ -19,7 +19,7 @@ import { useMutation } from "@apollo/client";
 import useUsernameExist from "../../../hooks/useUsernameExist";
 
 // Module
-import { setAuth } from "../../../util/auth";
+import { setAuth } from "../../../utils/auth";
 
 // Library
 import bcrypt from "bcryptjs";
