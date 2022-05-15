@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Heading, Modal, Text, useDisclosure } from "@chakra-ui/react";
 
 // React router
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Components
 import Answer from "../../../Components/Answer";
@@ -34,9 +34,9 @@ import Swal from "sweetalert2";
 const QuestionDetail = () => {
     const { questionId } = useParams();
 
-    const [isOptClick, setIsOptClick] = useState(false);
+    const navigate = useNavigate();
 
-    const [canAnswer, setCanAnswer] = useState(true);
+    const [isOptClick, setIsOptClick] = useState(false);
 
     const [valueEditQuestion, setValueEditQuestion] = useState("");
 
@@ -57,20 +57,6 @@ const QuestionDetail = () => {
     const { ADD_ANSWER } = answerMutation;
 
     const [getAnswersByQuestionId, { data: answers }] = useLazyQuery(GET_ANSWERS_BY_QUESTION_ID);
-
-    const { GET_ASNWER_BY_QUESTION_ID_AND_USER_ID } = answerQuery;
-
-    const [getAnswerByQuestionIdAndUserId] = useLazyQuery(GET_ASNWER_BY_QUESTION_ID_AND_USER_ID, {
-        onCompleted: (data) => {
-            if (data.answers.length !== 0) {
-                setCanAnswer(false);
-            }
-        },
-        onError: (err) => {
-            console.log(err);
-        },
-        refetchQueries: [GET_ANSWERS_BY_QUESTION_ID, "getAnswersByQuestionId"],
-    });
 
     const [getQuestionById, { data: question, loading: loadingQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
         onCompleted: (data) => {
@@ -164,14 +150,6 @@ const QuestionDetail = () => {
                 question_id: questionId,
             },
         });
-        if (isLogin) {
-            getAnswerByQuestionIdAndUserId({
-                variables: {
-                    question_id: questionId,
-                    user_id: userId,
-                },
-            });
-        }
     }, []);
 
     return (
@@ -195,15 +173,9 @@ const QuestionDetail = () => {
                             {isLogin ? (
                                 <>
                                     <Flex my={2} alignItems="center" justifyContent="space-between">
-                                        {canAnswer && isLogin ? (
-                                            <Box onClick={() => onOpenAnswer()}>
-                                                <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
-                                            </Box>
-                                        ) : (
-                                            <Box>
-                                                <ButtonWithIcon icon={<BiEdit />} text="Jawab" canClick={false} />
-                                            </Box>
-                                        )}
+                                        <Box onClick={() => onOpenAnswer()}>
+                                            <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
+                                        </Box>
                                         {question?.questions_by_pk.user_id === userId && (
                                             <Box _hover={{ cursor: "pointer" }}>
                                                 <Box
@@ -236,8 +208,8 @@ const QuestionDetail = () => {
                                     </Modal>
                                 </>
                             ) : (
-                                <Box onClick={() => onOpenAnswer()} my={2}>
-                                    <ButtonWithIcon text="Jawab" icon={<BiEdit />} canClick={false} />
+                                <Box onClick={() => navigate("/login")} my={2}>
+                                    <ButtonWithIcon text="Jawab" icon={<BiEdit />} />
                                 </Box>
                             )}
 

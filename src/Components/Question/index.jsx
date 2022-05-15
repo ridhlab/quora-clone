@@ -18,19 +18,16 @@ import { BsThreeDots } from "react-icons/bs";
 import { useSelector } from "react-redux";
 
 // GraphQL
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import questionMutation from "../../GraphQL/question/mutation";
 import answerMutation from "../../GraphQL/answer/mutation";
 import questionQuery from "../../GraphQL/question/query";
-import answerQuery from "../../GraphQL/answer/query";
 
 // Library
 import Swal from "sweetalert2";
 
 const Question = React.memo(({ answerCount, questionId, question, spaceId, answers, userId }) => {
     const [isOptClick, setIsOptClick] = useState(false);
-
-    const [canAnswer, setCanAnswer] = useState(true);
 
     const [valueEditQuestion, setValueEditQuestion] = useState(question);
 
@@ -49,19 +46,6 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
     const { ADD_ANSWER } = answerMutation;
 
     const { GET_QUESTIONS, GET_QUESTION_BY_ID } = questionQuery;
-
-    const { GET_ASNWER_BY_QUESTION_ID_AND_USER_ID } = answerQuery;
-
-    const [getAnswerByQuestionIdAndUserId] = useLazyQuery(GET_ASNWER_BY_QUESTION_ID_AND_USER_ID, {
-        onCompleted: (data) => {
-            if (data.answers.length !== 0) {
-                setCanAnswer(false);
-            }
-        },
-        onError: (err) => {
-            console.log(err);
-        },
-    });
 
     const [editQuestion] = useMutation(EDIT_QUESTION, {
         onCompleted: () => {
@@ -140,17 +124,6 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
         }
     };
 
-    useEffect(() => {
-        if (isLogin) {
-            getAnswerByQuestionIdAndUserId({
-                variables: {
-                    question_id: questionId,
-                    user_id: userIdStore,
-                },
-            });
-        }
-    }, []);
-
     return (
         <>
             <Box>
@@ -164,13 +137,13 @@ const Question = React.memo(({ answerCount, questionId, question, spaceId, answe
                 {answerCount} jawaban
             </Text>
             <Flex justifyContent="space-between" alignItems="center">
-                {canAnswer && isLogin ? (
+                {isLogin ? (
                     <Box onClick={() => onOpenAnswer()}>
                         <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
                     </Box>
                 ) : (
-                    <Box>
-                        <ButtonWithIcon icon={<BiEdit />} text="Jawab" canClick={false} />
+                    <Box onClick={() => navigate("/login")}>
+                        <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
                     </Box>
                 )}
 
