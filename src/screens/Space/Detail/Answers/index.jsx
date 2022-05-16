@@ -35,7 +35,7 @@ const SpaceAnswers = () => {
                 </Text>
             )}
             {answers?.answers.map((answer, idx) => {
-                const { upvote_count, downvote_count, id } = answer;
+                const { id } = answer;
                 const { id: questionId, question } = answer.question;
                 const { name, username, profile_picture } = answer.user;
                 return (
@@ -49,8 +49,6 @@ const SpaceAnswers = () => {
                                 profilePicture={profile_picture}
                                 question={question}
                                 answer={answer.answer}
-                                upvoteCount={upvote_count}
-                                downvoteCount={downvote_count}
                                 showQuestion={true}
                                 canClickLinkProfile={true}
                             />

@@ -16,8 +16,6 @@ const answerQuery = {
                     id
                 }
                 answer
-                upvote_count
-                downvote_count
             }
         }
     `,
@@ -26,8 +24,6 @@ const answerQuery = {
             answers(where: { question_id: { _eq: $question_id } }, order_by: { id: desc }) {
                 id
                 answer
-                upvote_count
-                downvote_count
                 user {
                     id
                     name
@@ -52,8 +48,6 @@ const answerQuery = {
                     question
                 }
                 answer
-                upvote_count
-                downvote_count
             }
         }
     `,
@@ -71,16 +65,6 @@ const answerQuery = {
                     id
                     question
                 }
-                answer
-                downvote_count
-                upvote_count
-            }
-        }
-    `,
-    GET_ASNWER_BY_QUESTION_ID_AND_USER_ID: gql`
-        query getAnswerByQuestionIdAndUserId($question_id: Int!, $user_id: Int!) {
-            answers(where: { question_id: { _eq: $question_id }, user_id: { _eq: $user_id } }) {
-                id
                 answer
             }
         }

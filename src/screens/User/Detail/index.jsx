@@ -29,7 +29,7 @@ import userMutation from "../../../GraphQL/user/mutation";
 import useUsernameExist from "../../../hooks/useUsernameExist";
 
 // Module
-import { setAuth } from "../../../util/auth";
+import { setAuth } from "../../../utils/auth";
 
 // Library
 import { useDropzone } from "react-dropzone";

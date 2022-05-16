@@ -8,8 +8,6 @@ const questionQuery = {
                 question
                 answers {
                     answer
-                    upvote_count
-                    downvote_count
                     user {
                         name
                         username

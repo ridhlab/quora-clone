@@ -37,7 +37,7 @@ const UserAnswers = () => {
                 </Box>
             )}
             {answers?.answers.map((answer, idx) => {
-                const { id: answerId, downvote_count, upvote_count } = answer;
+                const { id: answerId } = answer;
                 const { id: questionId, question } = answer.question;
                 const { id: userId, name, username, profile_picture } = answer.user;
                 return (
@@ -53,8 +53,6 @@ const UserAnswers = () => {
                                 question={question}
                                 answer={answer.answer}
                                 profilePicture={profile_picture}
-                                upvoteCount={upvote_count}
-                                downvoteCount={downvote_count}
                                 showQuestion={true}
                                 canClickLinkProfile={false}
                             />
