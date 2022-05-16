@@ -27,7 +27,11 @@ import Swal from "sweetalert2";
 const Home = () => {
     const [user, setUser] = useState({});
 
-    const { isLogin, username: usernameStore, isLoadingAuth } = useSelector((state) => state.authReducer);
+    const [spaceIdSelected, setSpaceIdSelected] = useState("Publik");
+
+    const [questionValue, setQuestionValue] = useState("");
+
+    const { isLogin, username: usernameStore } = useSelector((state) => state.authReducer);
 
     const { GET_ANSWERS } = answerQuery;
 
@@ -56,20 +60,26 @@ const Home = () => {
 
     const [addQuestionWithoutSpace] = useMutation(ADD_QUESTION_WITHOUT_SPACE, {
         onCompleted: (data) => {
+            setSpaceIdSelected("Publik");
+            setQuestionValue("");
             showAlertSuccessQuestion();
         },
         onError: (err) => {
             console.log(err);
         },
+        refetchQueries: [GET_QUESTIONS, "getQuestions"],
     });
 
     const [addQuestionWithSpace] = useMutation(ADD_QUESTION_WITH_SPACE, {
         onCompleted: (data) => {
+            setSpaceIdSelected("Publik");
+            setQuestionValue("");
             showAlertSuccessQuestion();
         },
         onError: (err) => {
             console.log(err);
         },
+        refetchQueries: [GET_QUESTIONS, "getQuestions"],
     });
 
     const showAlertSuccessQuestion = () => {
@@ -153,11 +163,15 @@ const Home = () => {
                                 profilePicture={user[0].profile_picture}
                                 spaces={spaces}
                                 handleClick={handleSubmitQuestion}
+                                spaceIdSelected={spaceIdSelected}
+                                setSpaceIdSelected={setSpaceIdSelected}
+                                questionValue={questionValue}
+                                setQuestionValue={setQuestionValue}
                             />
                         </Card>
                     )}
                     {answers?.answers.map((answer, idx) => {
-                        const { upvote_count, downvote_count, id } = answer;
+                        const { id } = answer;
                         const { profile_picture, username, name, id: userId } = answer.user;
                         const { question, id: questionId } = answer.question;
                         return (
@@ -171,8 +185,6 @@ const Home = () => {
                                     name={name}
                                     question={question}
                                     answer={answer.answer}
-                                    upvoteCount={upvote_count}
-                                    downvoteCount={downvote_count}
                                     refetch={refetch}
                                     showQuestion={true}
                                     canClickLinkProfile={true}

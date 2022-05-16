@@ -27,12 +27,12 @@ const Layout = ({ children }) => {
     }, []);
 
     return (
-        <Box>
+        <>
             <Navbar />
             <Container maxW={1000} py={4}>
                 {children}
             </Container>
-        </Box>
+        </>
     );
 };
 

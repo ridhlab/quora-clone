@@ -26,14 +26,7 @@ const QuestionScreen = () => {
                     const { answers, id, space_id, user_id } = question;
                     return (
                         <Card key={id}>
-                            <Question
-                                questionId={id}
-                                question={question.question}
-                                answerCount={answers.length}
-                                spaceId={space_id}
-                                answers={answers}
-                                userId={user_id}
-                            />
+                            <Question questionId={id} question={question.question} answerCount={answers.length} spaceId={space_id} userId={user_id} />
                         </Card>
                     );
                 })}

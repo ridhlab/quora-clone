@@ -219,7 +219,7 @@ const QuestionDetail = () => {
                     )}
                     {answers?.answers.map((answer, idx) => {
                         const { name, username, profile_picture, id: userId } = answer.user;
-                        const { upvote_count, downvote_count, id: answerId } = answer;
+                        const { id: answerId } = answer;
                         return (
                             <React.Fragment key={answerId}>
                                 <Box my={4}>
@@ -230,8 +230,6 @@ const QuestionDetail = () => {
                                         name={name}
                                         username={username}
                                         profilePicture={profile_picture}
-                                        upvoteCount={upvote_count}
-                                        downvoteCount={downvote_count}
                                         showQuestion={false}
                                         canClickLinkProfile={true}
                                     />

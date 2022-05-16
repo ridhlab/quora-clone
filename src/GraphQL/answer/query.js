@@ -16,8 +16,6 @@ const answerQuery = {
                     id
                 }
                 answer
-                upvote_count
-                downvote_count
             }
         }
     `,
@@ -26,8 +24,6 @@ const answerQuery = {
             answers(where: { question_id: { _eq: $question_id } }, order_by: { id: desc }) {
                 id
                 answer
-                upvote_count
-                downvote_count
                 user {
                     id
                     name
@@ -52,8 +48,6 @@ const answerQuery = {
                     question
                 }
                 answer
-                upvote_count
-                downvote_count
             }
         }
     `,
@@ -72,8 +66,6 @@ const answerQuery = {
                     question
                 }
                 answer
-                downvote_count
-                upvote_count
             }
         }
     `,

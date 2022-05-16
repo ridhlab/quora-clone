@@ -16,8 +16,6 @@ const userQuery = {
                 answers {
                     id
                     answer
-                    upvote_count
-                    downvote_count
                 }
             }
         }

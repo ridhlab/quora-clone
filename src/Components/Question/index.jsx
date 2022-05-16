@@ -26,7 +26,7 @@ import questionQuery from "../../GraphQL/question/query";
 // Library
 import Swal from "sweetalert2";
 
-const Question = React.memo(({ answerCount, questionId, question, spaceId, answers, userId }) => {
+const Question = React.memo(({ answerCount, questionId, question, spaceId, userId }) => {
     const [isOptClick, setIsOptClick] = useState(false);
 
     const [valueEditQuestion, setValueEditQuestion] = useState(question);

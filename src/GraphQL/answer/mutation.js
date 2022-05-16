@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 const answerMutation = {
     ADD_ANSWER: gql`
-        mutation addAnswerWithSpace($question_id: Int!, $user_id: Int!, $answer: String!, $space_id: Int!) {
+        mutation addAnswer($question_id: Int!, $user_id: Int!, $answer: String!, $space_id: Int!) {
             insert_answers_one(object: { question_id: $question_id, user_id: $user_id, answer: $answer, space_id: $space_id }) {
                 answer
                 question {
