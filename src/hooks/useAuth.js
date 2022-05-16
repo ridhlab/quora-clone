@@ -5,18 +5,15 @@ import { useDispatch } from "react-redux";
 import { SET_LOGIN_TRUE } from "../store/auth/action";
 
 const useAuth = () => {
-    const [isTokenValid, setIsTokenValid] = useState(false);
-
     const dispatch = useDispatch();
 
     const { GET_USER_FOR_AUTH } = userQuery;
 
-    const [getUserForAuth, { loading }] = useLazyQuery(GET_USER_FOR_AUTH, {
+    const [getUserForAuth] = useLazyQuery(GET_USER_FOR_AUTH, {
         onCompleted: (data) => {
             const { users } = data;
             if (users.length === 1) {
                 dispatch(SET_LOGIN_TRUE(users[0].id, users[0].username));
-                setIsTokenValid(true);
             }
         },
         onError: (err) => {
@@ -38,7 +35,7 @@ const useAuth = () => {
         }
     };
 
-    return { checkTokenValid, isTokenValid, loading };
+    return { checkTokenValid };
 };
 
 export default useAuth;
