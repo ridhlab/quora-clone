@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 // Components
 import Card from "../../../Components/Card";
 import Logo from "../../../Components/Logo";
-import WrapperAuth from "../../../Components/WrapperAuth";
+import LayoutAuth from "../../../Components/Layout/Auth";
 import { ErrorMessage, ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
 
 // GraphQL
@@ -156,7 +156,7 @@ const Register = () => {
     }, [isUsernameExist]);
 
     return (
-        <WrapperAuth>
+        <LayoutAuth>
             <Card>
                 <Flex justifyContent="center" mb={2}>
                     <Link to="/">
@@ -238,7 +238,7 @@ const Register = () => {
                     </Link>
                 </Text>
             </Card>
-        </WrapperAuth>
+        </LayoutAuth>
     );
 };
 

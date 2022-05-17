@@ -1,7 +1,6 @@
-import React from "react";
 import { Box } from "@chakra-ui/react";
 
-const WrapperAuth = ({ children }) => {
+const LayoutAuth = ({ children }) => {
     return (
         <Box maxW={360} margin="auto" h="100vh" display="flex" alignItems="center">
             <Box w="100%">{children}</Box>
@@ -9,4 +8,4 @@ const WrapperAuth = ({ children }) => {
     );
 };
 
-export default WrapperAuth;
+export default LayoutAuth;

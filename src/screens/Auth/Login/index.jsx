@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 // Components
 import Card from "../../../Components/Card";
 import Logo from "../../../Components/Logo";
-import WrapperAuth from "../../../Components/WrapperAuth";
+import LayoutAuth from "../../../Components/Layout/Auth";
 import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
 
 // Icons
@@ -100,7 +100,7 @@ const Login = () => {
     }, [isPasswordValid]);
 
     return (
-        <WrapperAuth>
+        <LayoutAuth>
             <Card>
                 <Flex justifyContent="center" mb={2}>
                     <Link to="/">
@@ -156,7 +156,7 @@ const Login = () => {
                     </Link>
                 </Text>
             </Card>
-        </WrapperAuth>
+        </LayoutAuth>
     );
 };
 
