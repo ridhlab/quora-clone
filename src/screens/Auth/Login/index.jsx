@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 // Components
 import Card from "../../../Components/Card";
 import Logo from "../../../Components/Logo";
-import WrapperAuth from "../../../Components/WrapperAuth";
+import LayoutAuth from "../../../Components/Layout/Auth";
 import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
 
 // Icons
@@ -19,10 +19,7 @@ import userQuery from "../../../GraphQL/user/query";
 import { useLazyQuery } from "@apollo/client";
 
 // Module
-import { setAuth } from "../../../utils/auth";
-
-// Library
-import bcrypt from "bcryptjs";
+import { setAuth, checkIsHashTextSame } from "../../../utils/auth";
 
 const Login = () => {
     const [passVisibility, setPassVisibility] = useState(false);
@@ -50,14 +47,9 @@ const Login = () => {
         },
     });
 
-    const checkisPasswordExact = async (passwInput, passwDb) => {
-        const isPasswordExact = await bcrypt.compare(passwInput, passwDb);
-        return isPasswordExact;
-    };
-
     const checkAuthValid = async (data) => {
         if (data.length === 1) {
-            const isPasswordExact = await checkisPasswordExact(value.password, data[0].password);
+            const isPasswordExact = await checkIsHashTextSame(value.password, data[0].password);
             if (isPasswordExact) {
                 navigate("/");
                 setAuth(btoa(data[0].username));
@@ -100,7 +92,7 @@ const Login = () => {
     }, [isPasswordValid]);
 
     return (
-        <WrapperAuth>
+        <LayoutAuth>
             <Card>
                 <Flex justifyContent="center" mb={2}>
                     <Link to="/">
@@ -156,7 +148,7 @@ const Login = () => {
                     </Link>
                 </Text>
             </Card>
-        </WrapperAuth>
+        </LayoutAuth>
     );
 };
 

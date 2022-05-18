@@ -13,6 +13,7 @@ import SpaceAnswers from "./screens/Space/Detail/Answers";
 import SpaceQuestions from "./screens/Space/Detail/Questions";
 import Login from "./screens/Auth/Login";
 import Register from "./screens/Auth/Register";
+import PageNotFound from "./screens/PageNotFound";
 
 const App = () => {
     return (
@@ -38,6 +39,7 @@ const App = () => {
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="*" element={<PageNotFound />} />
         </Routes>
     );
 };

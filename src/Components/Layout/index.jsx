@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Container } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 
 // Components
 import Navbar from "../Navbar";

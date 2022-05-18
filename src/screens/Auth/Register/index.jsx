@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 // Components
 import Card from "../../../Components/Card";
 import Logo from "../../../Components/Logo";
-import WrapperAuth from "../../../Components/WrapperAuth";
+import LayoutAuth from "../../../Components/Layout/Auth";
 import { ErrorMessage, ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
 
 // GraphQL
@@ -19,10 +19,7 @@ import { useMutation } from "@apollo/client";
 import useUsernameExist from "../../../hooks/useUsernameExist";
 
 // Module
-import { setAuth } from "../../../utils/auth";
-
-// Library
-import bcrypt from "bcryptjs";
+import { setAuth, getHashText } from "../../../utils/auth";
 
 const Register = () => {
     const [value, setValue] = useState({
@@ -49,8 +46,6 @@ const Register = () => {
     const [isUsernameExist, setIsUsernameExist] = useState(isUsernameExistHooks);
 
     const { ADD_USER } = userMutation;
-
-    const salt = bcrypt.genSaltSync(10);
 
     const [addUser] = useMutation(ADD_USER, {
         onCompleted: (data) => {
@@ -80,7 +75,7 @@ const Register = () => {
     };
 
     const registerSuccess = () => {
-        const encryptPassword = bcrypt.hashSync(passwordValue, salt);
+        const encryptPassword = getHashText(passwordValue);
         addUser({
             variables: {
                 name: nameValue,
@@ -156,7 +151,7 @@ const Register = () => {
     }, [isUsernameExist]);
 
     return (
-        <WrapperAuth>
+        <LayoutAuth>
             <Card>
                 <Flex justifyContent="center" mb={2}>
                     <Link to="/">
@@ -238,7 +233,7 @@ const Register = () => {
                     </Link>
                 </Text>
             </Card>
-        </WrapperAuth>
+        </LayoutAuth>
     );
 };
 
