@@ -9,7 +9,7 @@ import Answer from "../../../../Components/Answer";
 import LineSeparator from "../../../../Components/LineSeparator";
 
 // GraphQL
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import answerQuery from "../../../../GraphQL/answer/query";
 
 const SpaceAnswers = () => {
@@ -17,15 +17,11 @@ const SpaceAnswers = () => {
 
     const { GET_ANSWERS_BY_SPACE_ID } = answerQuery;
 
-    const [getAnswersBySpaceId, { data: answers }] = useLazyQuery(GET_ANSWERS_BY_SPACE_ID);
-
-    useEffect(() => {
-        getAnswersBySpaceId({
-            variables: {
-                space_id: spaceId,
-            },
-        });
-    }, []);
+    const { data: answers } = useQuery(GET_ANSWERS_BY_SPACE_ID, {
+        variables: {
+            space_id: spaceId,
+        },
+    });
 
     return (
         <Box>

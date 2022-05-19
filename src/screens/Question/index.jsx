@@ -8,16 +8,12 @@ import Question from "../../Components/Question";
 
 // GraphQL
 import questionQuery from "../../GraphQL/question/query";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 const QuestionScreen = () => {
     const { GET_QUESTIONS } = questionQuery;
 
-    const [getQuestions, { data }] = useLazyQuery(GET_QUESTIONS);
-
-    useEffect(() => {
-        getQuestions();
-    }, []);
+    const { data } = useQuery(GET_QUESTIONS);
 
     return (
         <Layout>

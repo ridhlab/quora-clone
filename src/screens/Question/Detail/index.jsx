@@ -22,7 +22,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { useSelector } from "react-redux";
 
 // GraphQL
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import answerQuery from "../../../GraphQL/answer/query";
 import answerMutation from "../../../GraphQL/answer/mutation";
 import questionQuery from "../../../GraphQL/question/query";
@@ -56,9 +56,16 @@ const QuestionDetail = () => {
 
     const { ADD_ANSWER } = answerMutation;
 
-    const [getAnswersByQuestionId, { data: answers }] = useLazyQuery(GET_ANSWERS_BY_QUESTION_ID);
+    const { data: answers } = useQuery(GET_ANSWERS_BY_QUESTION_ID, {
+        variables: {
+            question_id: questionId,
+        },
+    });
 
-    const [getQuestionById, { data: question, loading: loadingQuestion }] = useLazyQuery(GET_QUESTION_BY_ID, {
+    const { data: question, loading: loadingQuestion } = useQuery(GET_QUESTION_BY_ID, {
+        variables: {
+            question_id: questionId,
+        },
         onCompleted: (data) => {
             setValueEditQuestion(data.questions_by_pk.question);
         },
@@ -138,19 +145,6 @@ const QuestionDetail = () => {
             });
         }
     };
-
-    useEffect(() => {
-        getAnswersByQuestionId({
-            variables: {
-                question_id: questionId,
-            },
-        });
-        getQuestionById({
-            variables: {
-                question_id: questionId,
-            },
-        });
-    }, []);
 
     return (
         <Layout>
