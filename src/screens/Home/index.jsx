@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/react";
 
 // React router
 import { Link } from "react-router-dom";
@@ -31,6 +31,12 @@ const Home = () => {
 
     const [questionValue, setQuestionValue] = useState("");
 
+    const [answersData, setAnswersData] = useState([]);
+
+    const [answersAwaitData, setAnswersAwaitData] = useState([]);
+
+    const [isAllAnswersDataAppear, setIsAllAnswersDataAppear] = useState(false);
+
     const { isLogin, username: usernameStore } = useSelector((state) => state.authReducer);
 
     const { GET_ANSWERS } = answerQuery;
@@ -43,13 +49,18 @@ const Home = () => {
 
     const { ADD_QUESTION_WITHOUT_SPACE, ADD_QUESTION_WITH_SPACE } = questionMutation;
 
-    const [getAnswers, { data: answers, refetch }] = useLazyQuery(GET_ANSWERS);
+    const [getAnswers, { data: answers, refetch }] = useLazyQuery(GET_ANSWERS, {
+        onCompleted: (data) => {
+            setAnswersData(data.answers.slice(0, 4));
+            setAnswersAwaitData(data.answers.slice(4, data.answers.length));
+        },
+    });
 
     const [getQuestions, { data: questions }] = useLazyQuery(GET_QUESTIONS);
 
     const [getSpaces, { data: spaces }] = useLazyQuery(GET_SPACES);
 
-    const [getUserBysername, { data: users, loading: loadingUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
+    const [getUserBysername] = useLazyQuery(GET_USER_BY_USERNAME, {
         onCompleted: (data) => {
             setUser(data.users);
         },
@@ -104,6 +115,19 @@ const Home = () => {
                     },
                 });
             }
+        }
+    };
+
+    const handleLoadMoreAnswers = (data, awaitData) => {
+        let newData;
+        if (awaitData.length > 4) {
+            newData = [...data, ...awaitData.slice(0, 4)];
+            setAnswersData(newData);
+            setAnswersAwaitData(awaitData.slice(4, awaitData.length));
+        } else {
+            newData = [...data, ...awaitData];
+            setAnswersData(newData);
+            setIsAllAnswersDataAppear(true);
         }
     };
 
@@ -170,7 +194,7 @@ const Home = () => {
                             />
                         </Card>
                     )}
-                    {answers?.answers.map((answer, idx) => {
+                    {answersData.map((answer, idx) => {
                         const { id } = answer;
                         const { profile_picture, username, name, id: userId } = answer.user;
                         const { question, id: questionId } = answer.question;
@@ -192,6 +216,27 @@ const Home = () => {
                             </Card>
                         );
                     })}
+                    {answers ? (
+                        isAllAnswersDataAppear ? (
+                            <Text fontSize={13} textAlign="center">
+                                Jawaban telah ditampilkan semua
+                            </Text>
+                        ) : (
+                            <Button
+                                display="block"
+                                margin="auto"
+                                bgColor="primary.index"
+                                _hover={{ bgColor: "primary.hover" }}
+                                color="white"
+                                fontSize={13}
+                                onClick={() => handleLoadMoreAnswers(answersData, answersAwaitData)}
+                            >
+                                Muat Jawaban Lainnya
+                            </Button>
+                        )
+                    ) : (
+                        ""
+                    )}
                 </Box>
                 <Box maxWidth={250} display={{ base: "none", lg: "block" }}>
                     {questions?.questions.length > 1 && (
