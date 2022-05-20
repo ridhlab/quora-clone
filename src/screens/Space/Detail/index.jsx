@@ -11,6 +11,7 @@ import Layout from "../../../Components/Layout";
 import Tab from "../../../Components/Tab";
 import EditIcon from "../../../Components/FormEdit/EditIcon";
 import CollapseEdit from "../../../Components/FormEdit/CollapseEdit";
+import Loading from "../../../Components/Loading";
 
 // Store
 import { useSelector } from "react-redux";
@@ -73,7 +74,7 @@ const SpaceDetail = () => {
 
     const [tabActive, setTabActive] = useState(pathname.split("/").pop());
 
-    const { data: spaceData } = useQuery(GET_SPACE_BY_ID, {
+    const { data: spaceData, loading } = useQuery(GET_SPACE_BY_ID, {
         variables: {
             space_id: spaceId,
         },
@@ -189,133 +190,148 @@ const SpaceDetail = () => {
 
     return (
         <Layout>
-            <Box maxW={500} margin="auto">
-                <Card>
-                    {typeof spaceData !== "undefined" && (
-                        <>
-                            <Box>
-                                <Flex>
-                                    <Box
-                                        _hover={{
-                                            bgColor: isLogin && userIdStore === userIdSpaceAdmin ? "gray.500" : "",
-                                            cursor: isLogin && userIdStore === userIdSpaceAdmin ? "pointer" : "",
-                                            borderRadius: isLogin && userIdStore === userIdSpaceAdmin ? 50 : "",
-                                        }}
-                                        position="relative"
-                                        className={styles.wrapperSpacePic}
-                                        onClick={() => (isLogin && userIdStore === userIdSpaceAdmin ? document.getElementById("uploadImage").click() : "")}
-                                    >
-                                        <img src={base64imgProfileSpace} alt={name} width={76} style={{ borderRadius: 50 }} />
-                                        {isLogin && userIdStore === userIdSpaceAdmin && (
-                                            <>
-                                                <Box
-                                                    width="100%"
-                                                    height="100%"
-                                                    fontSize={12}
-                                                    position="absolute"
-                                                    bgColor="rgba(0, 0, 0, .4)"
-                                                    top="0"
-                                                    left="0"
-                                                    color="white"
-                                                    borderRadius={50}
-                                                    display="none"
-                                                    className={styles.editText}
-                                                    margin="auto"
-                                                >
-                                                    <Flex justifyContent="center" alignItems="center" height="100%">
-                                                        <Text fontWeight={500}>Edit Foto</Text>
-                                                    </Flex>
-                                                </Box>
-                                                <Box {...getRootProps()} id="uploadImage">
-                                                    <input {...getInputProps()} value="" />
-                                                </Box>
-                                            </>
-                                        )}
-                                    </Box>
-                                </Flex>
-                                {base64imgProfileSpace !== space_picture ? (
-                                    <>
-                                        <Button
-                                            fontSize={12}
-                                            display="inline-block"
-                                            p={1}
-                                            h="auto"
-                                            bgColor="primary.index"
-                                            color="white"
-                                            _hover={{ bgColor: "primary.hover" }}
-                                            onClick={() => handleClickEditSpacePic()}
-                                        >
-                                            Ganti Gambar
-                                        </Button>
-                                        <Button
-                                            fontSize={12}
-                                            mx={2}
-                                            display="inline-block"
-                                            p={1}
-                                            h="auto"
-                                            bgColor="gray.300"
-                                            color="white"
-                                            _hover={{ bgColor: "gray.200" }}
-                                            onClick={() => setBase64ImgProfileSpace(space_picture)}
-                                        >
-                                            Cancel
-                                        </Button>
-                                    </>
-                                ) : (
-                                    ""
-                                )}
+            {typeof spaceData !== "object" && loading ? (
+                <Box>
+                    <Loading />
+                </Box>
+            ) : (
+                <Box maxW={500} margin="auto">
+                    <Card>
+                        {typeof spaceData !== "undefined" && (
+                            <>
                                 <Box>
-                                    <Box
-                                        display={userIdStore === userIdSpaceAdmin ? "flex" : "block"}
-                                        alignItems={userIdStore === userIdSpaceAdmin ? "center" : null}
-                                    >
-                                        <Text fontWeight={500} fontSize={20}>
-                                            {name}
-                                        </Text>
-                                        {userIdStore === userIdSpaceAdmin && <EditIcon isEdit={isEditName} onToggle={onToggleName} setIsEdit={setIsEditName} />}
+                                    <Flex>
+                                        <Box
+                                            _hover={{
+                                                bgColor: isLogin && userIdStore === userIdSpaceAdmin ? "gray.500" : "",
+                                                cursor: isLogin && userIdStore === userIdSpaceAdmin ? "pointer" : "",
+                                                borderRadius: isLogin && userIdStore === userIdSpaceAdmin ? 50 : "",
+                                            }}
+                                            position="relative"
+                                            className={styles.wrapperSpacePic}
+                                            onClick={() => (isLogin && userIdStore === userIdSpaceAdmin ? document.getElementById("uploadImage").click() : "")}
+                                        >
+                                            <img src={base64imgProfileSpace} alt={name} width={76} style={{ borderRadius: 50 }} />
+                                            {isLogin && userIdStore === userIdSpaceAdmin && (
+                                                <>
+                                                    <Box
+                                                        width="100%"
+                                                        height="100%"
+                                                        fontSize={12}
+                                                        position="absolute"
+                                                        bgColor="rgba(0, 0, 0, .4)"
+                                                        top="0"
+                                                        left="0"
+                                                        color="white"
+                                                        borderRadius={50}
+                                                        display="none"
+                                                        className={styles.editText}
+                                                        margin="auto"
+                                                    >
+                                                        <Flex justifyContent="center" alignItems="center" height="100%">
+                                                            <Text fontWeight={500}>Edit Foto</Text>
+                                                        </Flex>
+                                                    </Box>
+                                                    <Box {...getRootProps()} id="uploadImage">
+                                                        <input {...getInputProps()} value="" />
+                                                    </Box>
+                                                </>
+                                            )}
+                                        </Box>
+                                    </Flex>
+                                    {base64imgProfileSpace !== space_picture ? (
+                                        <>
+                                            <Button
+                                                fontSize={12}
+                                                display="inline-block"
+                                                p={1}
+                                                h="auto"
+                                                bgColor="primary.index"
+                                                color="white"
+                                                _hover={{ bgColor: "primary.hover" }}
+                                                onClick={() => handleClickEditSpacePic()}
+                                            >
+                                                Ganti Gambar
+                                            </Button>
+                                            <Button
+                                                fontSize={12}
+                                                mx={2}
+                                                display="inline-block"
+                                                p={1}
+                                                h="auto"
+                                                bgColor="gray.300"
+                                                color="white"
+                                                _hover={{ bgColor: "gray.200" }}
+                                                onClick={() => setBase64ImgProfileSpace(space_picture)}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
+                                    <Box>
+                                        <Box
+                                            display={userIdStore === userIdSpaceAdmin ? "flex" : "block"}
+                                            alignItems={userIdStore === userIdSpaceAdmin ? "center" : null}
+                                        >
+                                            <Text fontWeight={500} fontSize={20}>
+                                                {name}
+                                            </Text>
+                                            {userIdStore === userIdSpaceAdmin && (
+                                                <EditIcon isEdit={isEditName} onToggle={onToggleName} setIsEdit={setIsEditName} />
+                                            )}
+                                        </Box>
+                                        <CollapseEdit
+                                            isOpen={isOpenName}
+                                            onToggle={onToggleName}
+                                            isEdit={isEditName}
+                                            setIsEdit={setIsEditName}
+                                            valueEdit={valueNameEdit}
+                                            setValueEdit={setValueNameEdit}
+                                            editName="name"
+                                            handleEdit={handleEdit}
+                                        />
+                                        <Box
+                                            display={userIdStore === userIdSpaceAdmin ? "flex" : "block"}
+                                            alignItems={userIdStore === userIdSpaceAdmin ? "center" : null}
+                                        >
+                                            <Text fontSize={14} my={2}>
+                                                {description}
+                                            </Text>
+                                            {userIdStore === userIdSpaceAdmin && (
+                                                <EditIcon isEdit={isEditDesc} onToggle={onToggleDesc} setIsEdit={setIsEditDesc} />
+                                            )}
+                                        </Box>
+                                        <CollapseEdit
+                                            isOpen={isOpenDesc}
+                                            onToggle={onToggleDesc}
+                                            isEdit={isEditDesc}
+                                            setIsEdit={setIsEditDesc}
+                                            valueEdit={valueDescEdit}
+                                            setValueEdit={setValueDescEdit}
+                                            editName="desc"
+                                            handleEdit={handleEdit}
+                                        />
                                     </Box>
-                                    <CollapseEdit
-                                        isOpen={isOpenName}
-                                        onToggle={onToggleName}
-                                        isEdit={isEditName}
-                                        setIsEdit={setIsEditName}
-                                        valueEdit={valueNameEdit}
-                                        setValueEdit={setValueNameEdit}
-                                        editName="name"
-                                        handleEdit={handleEdit}
-                                    />
-                                    <Box
-                                        display={userIdStore === userIdSpaceAdmin ? "flex" : "block"}
-                                        alignItems={userIdStore === userIdSpaceAdmin ? "center" : null}
-                                    >
-                                        <Text fontSize={14} my={2}>
-                                            {description}
-                                        </Text>
-                                        {userIdStore === userIdSpaceAdmin && <EditIcon isEdit={isEditDesc} onToggle={onToggleDesc} setIsEdit={setIsEditDesc} />}
-                                    </Box>
-                                    <CollapseEdit
-                                        isOpen={isOpenDesc}
-                                        onToggle={onToggleDesc}
-                                        isEdit={isEditDesc}
-                                        setIsEdit={setIsEditDesc}
-                                        valueEdit={valueDescEdit}
-                                        setValueEdit={setValueDescEdit}
-                                        editName="desc"
-                                        handleEdit={handleEdit}
-                                    />
                                 </Box>
-                            </Box>
-                            <Box>
-                                <Flex justifyContent="center">
-                                    <Tab text={`${answers.length} jawaban`} tabName="answers" tabActive={tabActive} handleClickTab={handleClickTab} />
-                                    <Tab text={`${questions.length} pertanyaan`} tabName="questions" tabActive={tabActive} handleClickTab={handleClickTab} />
-                                </Flex>
-                            </Box>
-                        </>
-                    )}
-                    <Outlet />
-                </Card>
-            </Box>
+                                <Box>
+                                    <Flex justifyContent="center">
+                                        <Tab text={`${answers.length} jawaban`} tabName="answers" tabActive={tabActive} handleClickTab={handleClickTab} />
+                                        <Tab
+                                            text={`${questions.length} pertanyaan`}
+                                            tabName="questions"
+                                            tabActive={tabActive}
+                                            handleClickTab={handleClickTab}
+                                        />
+                                    </Flex>
+                                </Box>
+                            </>
+                        )}
+                        <Outlet />
+                    </Card>
+                </Box>
+            )}
         </Layout>
     );
 };

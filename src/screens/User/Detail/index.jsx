@@ -13,6 +13,7 @@ import CollapseEdit from "../../../Components/FormEdit/CollapseEdit";
 import EditIcon from "../../../Components/FormEdit/EditIcon";
 import { ErrorMessageWithCard } from "../../../Components/AuthErrorMessage";
 import ButtonWithIcon from "../../../Components/ButtonWithIcon";
+import Loading from "../../../Components/Loading";
 
 // Icons
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
@@ -87,7 +88,7 @@ const User = () => {
 
     const { GET_USER_BY_USERNAME } = userQuery;
 
-    const [getUserByUsername, { data: dataUser }] = useLazyQuery(GET_USER_BY_USERNAME, {
+    const [getUserByUsername, { data: dataUser, loading: userLoading }] = useLazyQuery(GET_USER_BY_USERNAME, {
         onCompleted: (data) => {
             setUser(data.users[0]);
             setValueNameEdit(data.users[0].name);
@@ -260,185 +261,198 @@ const User = () => {
 
     return (
         <Layout>
-            <Box maxW={500} margin="auto">
-                <Card>
-                    {typeof dataUser !== "undefined" && (
-                        <>
-                            <Box>
-                                <Flex>
-                                    <Box
-                                        _hover={{
-                                            bgColor: isLogin && usernameParams === usernameStore ? "gray.500" : "",
-                                            cursor: isLogin && usernameParams === usernameStore ? "pointer" : "",
-                                            borderRadius: isLogin && usernameParams === usernameStore ? 50 : "",
-                                        }}
-                                        position="relative"
-                                        className={styles.wrapperProfilePic}
-                                        onClick={() => (isLogin && usernameParams === usernameStore ? document.getElementById("uploadImage").click() : "")}
-                                    >
-                                        <img src={base64ImgProfile} alt={username} width={100} style={{ borderRadius: 50 }} />
-                                        {isLogin && usernameParams === usernameStore && (
-                                            <>
-                                                <Box
-                                                    width="100%"
-                                                    height="100%"
-                                                    fontSize={12}
-                                                    position="absolute"
-                                                    bgColor="rgba(0, 0, 0, .4)"
-                                                    top="0"
-                                                    left="0"
-                                                    color="white"
-                                                    borderRadius={50}
-                                                    display="none"
-                                                    className={styles.editText}
-                                                    margin="auto"
-                                                >
-                                                    <Flex justifyContent="center" alignItems="center" height="100%">
-                                                        <Text fontWeight={500}>Edit Foto</Text>
-                                                    </Flex>
-                                                </Box>
-                                                <Box {...getRootProps()} id="uploadImage">
-                                                    <input {...getInputProps()} value="" />
-                                                </Box>
-                                            </>
-                                        )}
-                                    </Box>
-                                </Flex>
-                                {base64ImgProfile !== profile_picture ? (
-                                    <>
-                                        <Button
-                                            fontSize={12}
-                                            display="inline-block"
-                                            p={1}
-                                            h="auto"
-                                            bgColor="primary.index"
-                                            color="white"
-                                            _hover={{ bgColor: "primary.hover" }}
-                                            onClick={() => handleClickEditPicture()}
-                                        >
-                                            Ganti Gambar
-                                        </Button>
-                                        <Button
-                                            mx={2}
-                                            fontSize={12}
-                                            display="inline-block"
-                                            p={1}
-                                            h="auto"
-                                            bgColor="gray.300"
-                                            color="white"
-                                            _hover={{ bgColor: "gray.200" }}
-                                            onClick={() => setBase64ImgProfile(profile_picture)}
-                                        >
-                                            Cancel
-                                        </Button>
-                                    </>
-                                ) : (
-                                    ""
-                                )}
+            {typeof dataUser !== "object" && userLoading ? (
+                <Box>
+                    <Loading />
+                </Box>
+            ) : (
+                <Box maxW={500} margin="auto">
+                    <Card>
+                        {typeof dataUser !== "undefined" && (
+                            <>
                                 <Box>
-                                    <Box
-                                        display={usernameParams === usernameStore ? "flex" : "block"}
-                                        alignItems={usernameParams === usernameStore ? "center" : null}
-                                    >
-                                        <Text fontWeight={500} fontSize={20}>
-                                            {name}
-                                        </Text>
-                                        {usernameParams === usernameStore && <EditIcon onToggle={onToggleName} setIsEdit={setIsEditName} isEdit={isEditName} />}
-                                    </Box>
-                                    <CollapseEdit
-                                        isOpen={isOpenName}
-                                        onToggle={onToggleName}
-                                        isEdit={isEditName}
-                                        setIsEdit={setIsEditName}
-                                        valueEdit={valueNameEdit}
-                                        setValueEdit={setValueNameEdit}
-                                        editName="name"
-                                        handleEdit={handleEdit}
-                                    />
-                                </Box>
-                                <Box>
-                                    <Box
-                                        display={usernameParams === usernameStore ? "flex" : "block"}
-                                        alignItems={usernameParams === usernameStore ? "center" : null}
-                                    >
-                                        <Text fontSize={14} color="gray.500">
-                                            @{username}
-                                        </Text>
-                                        {usernameParams === usernameStore && (
-                                            <EditIcon isEdit={isEditUsername} onToggle={onToggleUsername} setIsEdit={setIsEditUsername} />
-                                        )}
-                                    </Box>
-                                    <CollapseEdit
-                                        isOpen={isOpenUsername}
-                                        onToggle={onToggleUsername}
-                                        isEdit={isEditUsername}
-                                        setIsEdit={setIsEditUsername}
-                                        valueEdit={valueUsernameEdit}
-                                        setValueEdit={setValueUsernameEdit}
-                                        editName="username"
-                                        handleEdit={handleEdit}
-                                    />
-                                    {isUsernameExist ? (
-                                        <Box mt={2}>
-                                            <ErrorMessageWithCard message="Username sudah ada" />
+                                    <Flex>
+                                        <Box
+                                            _hover={{
+                                                bgColor: isLogin && usernameParams === usernameStore ? "gray.500" : "",
+                                                cursor: isLogin && usernameParams === usernameStore ? "pointer" : "",
+                                                borderRadius: isLogin && usernameParams === usernameStore ? 50 : "",
+                                            }}
+                                            position="relative"
+                                            className={styles.wrapperProfilePic}
+                                            onClick={() => (isLogin && usernameParams === usernameStore ? document.getElementById("uploadImage").click() : "")}
+                                        >
+                                            <img src={base64ImgProfile} alt={username} width={100} style={{ borderRadius: 50 }} />
+                                            {isLogin && usernameParams === usernameStore && (
+                                                <>
+                                                    <Box
+                                                        width="100%"
+                                                        height="100%"
+                                                        fontSize={12}
+                                                        position="absolute"
+                                                        bgColor="rgba(0, 0, 0, .4)"
+                                                        top="0"
+                                                        left="0"
+                                                        color="white"
+                                                        borderRadius={50}
+                                                        display="none"
+                                                        className={styles.editText}
+                                                        margin="auto"
+                                                    >
+                                                        <Flex justifyContent="center" alignItems="center" height="100%">
+                                                            <Text fontWeight={500}>Edit Foto</Text>
+                                                        </Flex>
+                                                    </Box>
+                                                    <Box {...getRootProps()} id="uploadImage">
+                                                        <input {...getInputProps()} value="" />
+                                                    </Box>
+                                                </>
+                                            )}
                                         </Box>
+                                    </Flex>
+                                    {base64ImgProfile !== profile_picture ? (
+                                        <>
+                                            <Button
+                                                fontSize={12}
+                                                display="inline-block"
+                                                p={1}
+                                                h="auto"
+                                                bgColor="primary.index"
+                                                color="white"
+                                                _hover={{ bgColor: "primary.hover" }}
+                                                onClick={() => handleClickEditPicture()}
+                                            >
+                                                Ganti Gambar
+                                            </Button>
+                                            <Button
+                                                mx={2}
+                                                fontSize={12}
+                                                display="inline-block"
+                                                p={1}
+                                                h="auto"
+                                                bgColor="gray.300"
+                                                color="white"
+                                                _hover={{ bgColor: "gray.200" }}
+                                                onClick={() => setBase64ImgProfile(profile_picture)}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </>
                                     ) : (
                                         ""
                                     )}
-                                </Box>
-                                <Box>
-                                    <Box
-                                        display={usernameParams === usernameStore ? "flex" : "block"}
-                                        alignItems={usernameParams === usernameStore ? "center" : null}
-                                    >
-                                        <Text my={2} fontSize={13}>
-                                            {bio}
-                                        </Text>
-                                        {usernameParams === usernameStore ? (
-                                            bio !== null ? (
-                                                <EditIcon isEdit={isEditBio} onToggle={onToggleBio} setIsEdit={setIsEditBio} />
-                                            ) : (
-                                                <Box
-                                                    my={2}
-                                                    onClick={() => {
-                                                        onToggleBio();
-                                                        setIsEditBio(!isEditBio);
-                                                    }}
-                                                >
-                                                    {isEditBio ? (
-                                                        <ButtonWithIcon icon={<AiOutlineMinusCircle />} text="Tambah Bio" />
-                                                    ) : (
-                                                        <ButtonWithIcon icon={<AiOutlinePlusCircle />} text="Tambah Bio" />
-                                                    )}
-                                                </Box>
-                                            )
+                                    <Box>
+                                        <Box
+                                            display={usernameParams === usernameStore ? "flex" : "block"}
+                                            alignItems={usernameParams === usernameStore ? "center" : null}
+                                        >
+                                            <Text fontWeight={500} fontSize={20}>
+                                                {name}
+                                            </Text>
+                                            {usernameParams === usernameStore && (
+                                                <EditIcon onToggle={onToggleName} setIsEdit={setIsEditName} isEdit={isEditName} />
+                                            )}
+                                        </Box>
+                                        <CollapseEdit
+                                            isOpen={isOpenName}
+                                            onToggle={onToggleName}
+                                            isEdit={isEditName}
+                                            setIsEdit={setIsEditName}
+                                            valueEdit={valueNameEdit}
+                                            setValueEdit={setValueNameEdit}
+                                            editName="name"
+                                            handleEdit={handleEdit}
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <Box
+                                            display={usernameParams === usernameStore ? "flex" : "block"}
+                                            alignItems={usernameParams === usernameStore ? "center" : null}
+                                        >
+                                            <Text fontSize={14} color="gray.500">
+                                                @{username}
+                                            </Text>
+                                            {usernameParams === usernameStore && (
+                                                <EditIcon isEdit={isEditUsername} onToggle={onToggleUsername} setIsEdit={setIsEditUsername} />
+                                            )}
+                                        </Box>
+                                        <CollapseEdit
+                                            isOpen={isOpenUsername}
+                                            onToggle={onToggleUsername}
+                                            isEdit={isEditUsername}
+                                            setIsEdit={setIsEditUsername}
+                                            valueEdit={valueUsernameEdit}
+                                            setValueEdit={setValueUsernameEdit}
+                                            editName="username"
+                                            handleEdit={handleEdit}
+                                        />
+                                        {isUsernameExist ? (
+                                            <Box mt={2}>
+                                                <ErrorMessageWithCard message="Username sudah ada" />
+                                            </Box>
                                         ) : (
                                             ""
                                         )}
                                     </Box>
-                                    <CollapseEdit
-                                        isOpen={isOpenBio}
-                                        onToggle={onToggleBio}
-                                        isEdit={isEditBio}
-                                        setIsEdit={setIsEditBio}
-                                        valueEdit={valueBioEdit}
-                                        setValueEdit={setValueBioEdit}
-                                        editName="bio"
-                                        handleEdit={handleEdit}
-                                    />
+                                    <Box>
+                                        <Box
+                                            display={usernameParams === usernameStore ? "flex" : "block"}
+                                            alignItems={usernameParams === usernameStore ? "center" : null}
+                                        >
+                                            <Text my={2} fontSize={13}>
+                                                {bio}
+                                            </Text>
+                                            {usernameParams === usernameStore ? (
+                                                bio !== null ? (
+                                                    <EditIcon isEdit={isEditBio} onToggle={onToggleBio} setIsEdit={setIsEditBio} />
+                                                ) : (
+                                                    <Box
+                                                        my={2}
+                                                        onClick={() => {
+                                                            onToggleBio();
+                                                            setIsEditBio(!isEditBio);
+                                                        }}
+                                                    >
+                                                        {isEditBio ? (
+                                                            <ButtonWithIcon icon={<AiOutlineMinusCircle />} text="Tambah Bio" />
+                                                        ) : (
+                                                            <ButtonWithIcon icon={<AiOutlinePlusCircle />} text="Tambah Bio" />
+                                                        )}
+                                                    </Box>
+                                                )
+                                            ) : (
+                                                ""
+                                            )}
+                                        </Box>
+                                        <CollapseEdit
+                                            isOpen={isOpenBio}
+                                            onToggle={onToggleBio}
+                                            isEdit={isEditBio}
+                                            setIsEdit={setIsEditBio}
+                                            valueEdit={valueBioEdit}
+                                            setValueEdit={setValueBioEdit}
+                                            editName="bio"
+                                            handleEdit={handleEdit}
+                                        />
+                                    </Box>
                                 </Box>
-                            </Box>
-                            <Box>
-                                <Flex justifyContent="center">
-                                    <Tab text={`${answers.length} jawaban`} tabActive={tabActive} tabName="answers" handleClickTab={handleClickTab} />
-                                    <Tab text={`${questions.length} pertanyaan`} tabActive={tabActive} tabName="questions" handleClickTab={handleClickTab} />
-                                </Flex>
-                            </Box>
-                        </>
-                    )}
-                    <Outlet />
-                </Card>
-            </Box>
+                                <Box>
+                                    <Flex justifyContent="center">
+                                        <Tab text={`${answers.length} jawaban`} tabActive={tabActive} tabName="answers" handleClickTab={handleClickTab} />
+                                        <Tab
+                                            text={`${questions.length} pertanyaan`}
+                                            tabActive={tabActive}
+                                            tabName="questions"
+                                            handleClickTab={handleClickTab}
+                                        />
+                                    </Flex>
+                                </Box>
+                            </>
+                        )}
+                        <Outlet />
+                    </Card>
+                </Box>
+            )}
         </Layout>
     );
 };

@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 // Components
 import Answer from "../../../../Components/Answer";
 import LineSeparator from "../../../../Components/LineSeparator";
+import Loading from "../../../../Components/Loading";
 
 // GraphQL
 import { useQuery } from "@apollo/client";
@@ -17,11 +18,19 @@ const SpaceAnswers = () => {
 
     const { GET_ANSWERS_BY_SPACE_ID } = answerQuery;
 
-    const { data: answers } = useQuery(GET_ANSWERS_BY_SPACE_ID, {
+    const { data: answers, loading } = useQuery(GET_ANSWERS_BY_SPACE_ID, {
         variables: {
             space_id: spaceId,
         },
     });
+
+    if (typeof answers !== "object" && loading) {
+        return (
+            <Box>
+                <Loading />
+            </Box>
+        );
+    }
 
     return (
         <Box>

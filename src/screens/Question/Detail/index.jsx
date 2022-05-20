@@ -27,6 +27,7 @@ import answerQuery from "../../../GraphQL/answer/query";
 import answerMutation from "../../../GraphQL/answer/mutation";
 import questionQuery from "../../../GraphQL/question/query";
 import questionMutation from "../../../GraphQL/question/mutation";
+import Loading from "../../../Components/Loading";
 
 // Library
 import Swal from "sweetalert2";
@@ -56,7 +57,7 @@ const QuestionDetail = () => {
 
     const { ADD_ANSWER } = answerMutation;
 
-    const { data: answers } = useQuery(GET_ANSWERS_BY_QUESTION_ID, {
+    const { data: answers, loading: loadingAnswers } = useQuery(GET_ANSWERS_BY_QUESTION_ID, {
         variables: {
             question_id: questionId,
         },
@@ -148,97 +149,110 @@ const QuestionDetail = () => {
 
     return (
         <Layout>
-            <Box maxW={500} margin="auto">
-                <Card>
-                    <Heading as="h6" fontSize={20}>
-                        {question?.questions_by_pk.question}
-                    </Heading>
-                    <Modal isOpen={isOpenEdit} onClose={onCloseEdit} isCentered>
-                        <ModalEdit
-                            valueEdit={valueEditQuestion}
-                            setValueEdit={setValueEditQuestion}
-                            handleClickClose={handleClickCloseEdit}
-                            handleSubmit={handleSubmitEdit}
-                            modalTitle="Edit Pertanyaan"
-                        />
-                    </Modal>
-                    {!loadingQuestion && typeof question !== "undefined" && (
-                        <>
-                            {isLogin ? (
-                                <>
-                                    <Flex my={2} alignItems="center" justifyContent="space-between">
-                                        <Box onClick={() => onOpenAnswer()}>
-                                            <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
-                                        </Box>
-                                        {question?.questions_by_pk.user_id === userId && (
-                                            <Box _hover={{ cursor: "pointer" }}>
-                                                <Box
-                                                    padding={1}
-                                                    position="relative"
-                                                    borderRadius={50}
-                                                    _hover={{ bgColor: "gray.100" }}
-                                                    onClick={() => setIsOptClick(!isOptClick)}
-                                                >
-                                                    <BsThreeDots />
-                                                </Box>
-                                                {isOptClick && (
-                                                    <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
-                                                        <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
-                                                            <FiEdit2 size={10} />
-                                                            <Text fontSize={13}>Edit</Text>
-                                                        </Flex>
-                                                    </Box>
-                                                )}
+            {typeof question !== "object" && loadingQuestion ? (
+                <Box>
+                    <Loading />
+                </Box>
+            ) : (
+                <Box maxW={500} margin="auto">
+                    <Card>
+                        <Heading as="h6" fontSize={20}>
+                            {question?.questions_by_pk.question}
+                        </Heading>
+                        <Modal isOpen={isOpenEdit} onClose={onCloseEdit} isCentered>
+                            <ModalEdit
+                                valueEdit={valueEditQuestion}
+                                setValueEdit={setValueEditQuestion}
+                                handleClickClose={handleClickCloseEdit}
+                                handleSubmit={handleSubmitEdit}
+                                modalTitle="Edit Pertanyaan"
+                            />
+                        </Modal>
+                        {!loadingQuestion && typeof question !== "undefined" && (
+                            <>
+                                {isLogin ? (
+                                    <>
+                                        <Flex my={2} alignItems="center" justifyContent="space-between">
+                                            <Box onClick={() => onOpenAnswer()}>
+                                                <ButtonWithIcon icon={<BiEdit />} text="Jawab" />
                                             </Box>
-                                        )}
-                                    </Flex>
-                                    <Modal isOpen={isOpenAnswer} onClose={onCloseAnswer} isCentered>
-                                        <ModalAnswer
-                                            question={question?.questions_by_pk.question}
-                                            handleClickCloseAnswer={handleClickCloseAnswer}
-                                            setValueAnswer={setValueAnswer}
-                                            handleClickAnswer={handleClickAnswer}
-                                        />
-                                    </Modal>
-                                </>
-                            ) : (
-                                <Box onClick={() => navigate("/login")} my={2}>
-                                    <ButtonWithIcon text="Jawab" icon={<BiEdit />} />
-                                </Box>
-                            )}
-
-                            <hr />
-                            <hr />
-                        </>
-                    )}
-                    {answers?.answers.map((answer, idx) => {
-                        const { name, username, profile_picture, id: userId } = answer.user;
-                        const { id: answerId } = answer;
-                        return (
-                            <React.Fragment key={answerId}>
-                                <Box my={4}>
-                                    <Answer
-                                        answerId={answerId}
-                                        userId={userId}
-                                        answer={answer.answer}
-                                        name={name}
-                                        username={username}
-                                        profilePicture={profile_picture}
-                                        showQuestion={false}
-                                        canClickLinkProfile={true}
-                                    />
-                                </Box>
-                                {idx !== answers.answers.length - 1 && <LineSeparator />}
-                            </React.Fragment>
-                        );
-                    })}
-                    {answers?.answers.length === 0 && (
-                        <Text textAlign="center" color="gray.500" fontSize={13} my={2}>
-                            Belum ada jawaban
-                        </Text>
-                    )}
-                </Card>
-            </Box>
+                                            {question?.questions_by_pk.user_id === userId && (
+                                                <Box _hover={{ cursor: "pointer" }}>
+                                                    <Box
+                                                        padding={1}
+                                                        position="relative"
+                                                        borderRadius={50}
+                                                        _hover={{ bgColor: "gray.100" }}
+                                                        onClick={() => setIsOptClick(!isOptClick)}
+                                                    >
+                                                        <BsThreeDots />
+                                                    </Box>
+                                                    {isOptClick && (
+                                                        <Box p={2} position="absolute" minW={100} bgColor="white" boxShadow="0px 1px 7px rgba(0, 0, 0, 0.17)">
+                                                            <Flex alignItems="center" _hover={{ color: "primary.index" }} onClick={() => handleClickEdit()}>
+                                                                <FiEdit2 size={10} />
+                                                                <Text fontSize={13}>Edit</Text>
+                                                            </Flex>
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            )}
+                                        </Flex>
+                                        <Modal isOpen={isOpenAnswer} onClose={onCloseAnswer} isCentered>
+                                            <ModalAnswer
+                                                question={question?.questions_by_pk.question}
+                                                handleClickCloseAnswer={handleClickCloseAnswer}
+                                                setValueAnswer={setValueAnswer}
+                                                handleClickAnswer={handleClickAnswer}
+                                            />
+                                        </Modal>
+                                    </>
+                                ) : (
+                                    <Box onClick={() => navigate("/login")} my={2}>
+                                        <ButtonWithIcon text="Jawab" icon={<BiEdit />} />
+                                    </Box>
+                                )}
+                                <hr />
+                                <hr />
+                            </>
+                        )}
+                        {typeof answers !== "object" && loadingAnswers ? (
+                            <Box>
+                                <Loading />
+                            </Box>
+                        ) : (
+                            <>
+                                {answers?.answers.map((answer, idx) => {
+                                    const { name, username, profile_picture, id: userId } = answer.user;
+                                    const { id: answerId } = answer;
+                                    return (
+                                        <React.Fragment key={answerId}>
+                                            <Box my={4}>
+                                                <Answer
+                                                    answerId={answerId}
+                                                    userId={userId}
+                                                    answer={answer.answer}
+                                                    name={name}
+                                                    username={username}
+                                                    profilePicture={profile_picture}
+                                                    showQuestion={false}
+                                                    canClickLinkProfile={true}
+                                                />
+                                            </Box>
+                                            {idx !== answers.answers.length - 1 && <LineSeparator />}
+                                        </React.Fragment>
+                                    );
+                                })}
+                                {answers?.answers.length === 0 && (
+                                    <Text textAlign="center" color="gray.500" fontSize={13} my={2}>
+                                        Belum ada jawaban
+                                    </Text>
+                                )}
+                            </>
+                        )}
+                    </Card>
+                </Box>
+            )}
         </Layout>
     );
 };
