@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 // Components
 import Question from "../../../../Components/Question";
 import LineSeparator from "../../../../Components/LineSeparator";
+import Loading from "../../../../Components/Loading";
 
 // GraphQL
 import { useQuery } from "@apollo/client";
@@ -17,12 +18,19 @@ const UserQuestions = () => {
 
     const { GET_QUESTIONS_BY_USERNAME } = questionQuery;
 
-    const { data: questions } = useQuery(GET_QUESTIONS_BY_USERNAME, {
+    const { data: questions, loading } = useQuery(GET_QUESTIONS_BY_USERNAME, {
         variables: {
             username,
         },
     });
 
+    if (typeof questions !== "object" && loading) {
+        return (
+            <Box>
+                <Loading />
+            </Box>
+        );
+    }
     return (
         <Box>
             {questions?.questions.length === 0 && (

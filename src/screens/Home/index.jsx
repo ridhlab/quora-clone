@@ -9,6 +9,7 @@ import Layout from "../../Components/Layout";
 import Answer from "../../Components/Answer";
 import Card from "../../Components/Card";
 import QuestionForm from "../../Components/QuestionForm";
+import Loading from "../../Components/Loading";
 
 // Store
 import { useSelector } from "react-redux";
@@ -49,7 +50,7 @@ const Home = () => {
 
     const { ADD_QUESTION_WITHOUT_SPACE, ADD_QUESTION_WITH_SPACE } = questionMutation;
 
-    const [getAnswers, { data: answers, refetch }] = useLazyQuery(GET_ANSWERS, {
+    const [getAnswers, { data: answers, loading: answersLoading, refetch }] = useLazyQuery(GET_ANSWERS, {
         onCompleted: (data) => {
             setAnswersData(data.answers.slice(0, 4));
             setAnswersAwaitData(data.answers.slice(4, data.answers.length));
@@ -149,118 +150,124 @@ const Home = () => {
 
     return (
         <Layout>
-            <Flex justifyContent={{ base: "center", lg: "space-between" }}>
-                <Box display={{ base: "none", lg: "block" }}>
-                    {spaces?.spaces.length > 1 && (
-                        <Box my={4}>
-                            <Heading as="h6" fontSize={16}>
-                                Daftar Ruang
-                            </Heading>
-                            <UnorderedList mx={0} my={2}>
-                                {spaces?.spaces.map((space, idx) => {
-                                    const { id, name, space_picture } = space;
-                                    return (
-                                        <Flex key={id}>
-                                            <Link to={`/space/${id}/answers`} className="link-underline">
-                                                <ListItem key={space.id} listStyleType="none" display="flex" alignItems="center">
-                                                    <Box>
-                                                        <img src={space_picture} width={24} alt={space} style={{ borderRadius: 50 }} />
-                                                    </Box>
-                                                    <Text fontSize={13} mx={2}>
-                                                        {name}
-                                                    </Text>
-                                                </ListItem>
-                                            </Link>
-                                        </Flex>
-                                    );
-                                })}
-                            </UnorderedList>
-                        </Box>
-                    )}
+            {typeof answers !== "object" && answersLoading ? (
+                <Box>
+                    <Loading />
                 </Box>
-                <Box maxWidth={500}>
-                    {user.length > 0 && isLogin && (
-                        <Card>
-                            <QuestionForm
-                                userId={user[0].id}
-                                username={user[0].username}
-                                profilePicture={user[0].profile_picture}
-                                spaces={spaces}
-                                handleClick={handleSubmitQuestion}
-                                spaceIdSelected={spaceIdSelected}
-                                setSpaceIdSelected={setSpaceIdSelected}
-                                questionValue={questionValue}
-                                setQuestionValue={setQuestionValue}
-                            />
-                        </Card>
-                    )}
-                    {answersData.map((answer, idx) => {
-                        const { id } = answer;
-                        const { profile_picture, username, name, id: userId } = answer.user;
-                        const { question, id: questionId } = answer.question;
-                        return (
-                            <Card key={answer.id}>
-                                <Answer
-                                    answerId={id}
-                                    userId={userId}
-                                    questionId={questionId}
-                                    profilePicture={profile_picture}
-                                    username={username}
-                                    name={name}
-                                    question={question}
-                                    answer={answer.answer}
-                                    refetch={refetch}
-                                    showQuestion={true}
-                                    canClickLinkProfile={true}
+            ) : (
+                <Flex justifyContent={{ base: "center", lg: "space-between" }}>
+                    <Box display={{ base: "none", lg: "block" }}>
+                        {spaces?.spaces.length > 1 && (
+                            <Box my={4}>
+                                <Heading as="h6" fontSize={16}>
+                                    Daftar Ruang
+                                </Heading>
+                                <UnorderedList mx={0} my={2}>
+                                    {spaces?.spaces.map((space, idx) => {
+                                        const { id, name, space_picture } = space;
+                                        return (
+                                            <Flex key={id}>
+                                                <Link to={`/space/${id}/answers`} className="link-underline">
+                                                    <ListItem key={space.id} listStyleType="none" display="flex" alignItems="center">
+                                                        <Box>
+                                                            <img src={space_picture} width={24} alt={space} style={{ borderRadius: 50 }} />
+                                                        </Box>
+                                                        <Text fontSize={13} mx={2}>
+                                                            {name}
+                                                        </Text>
+                                                    </ListItem>
+                                                </Link>
+                                            </Flex>
+                                        );
+                                    })}
+                                </UnorderedList>
+                            </Box>
+                        )}
+                    </Box>
+                    <Box maxWidth={500}>
+                        {user.length > 0 && isLogin && (
+                            <Card>
+                                <QuestionForm
+                                    userId={user[0].id}
+                                    username={user[0].username}
+                                    profilePicture={user[0].profile_picture}
+                                    spaces={spaces}
+                                    handleClick={handleSubmitQuestion}
+                                    spaceIdSelected={spaceIdSelected}
+                                    setSpaceIdSelected={setSpaceIdSelected}
+                                    questionValue={questionValue}
+                                    setQuestionValue={setQuestionValue}
                                 />
                             </Card>
-                        );
-                    })}
-                    {answers ? (
-                        isAllAnswersDataAppear ? (
-                            <Text fontSize={13} textAlign="center">
-                                Jawaban telah ditampilkan semua
-                            </Text>
+                        )}
+                        {answersData.map((answer, idx) => {
+                            const { id } = answer;
+                            const { profile_picture, username, name, id: userId } = answer.user;
+                            const { question, id: questionId } = answer.question;
+                            return (
+                                <Card key={answer.id}>
+                                    <Answer
+                                        answerId={id}
+                                        userId={userId}
+                                        questionId={questionId}
+                                        profilePicture={profile_picture}
+                                        username={username}
+                                        name={name}
+                                        question={question}
+                                        answer={answer.answer}
+                                        refetch={refetch}
+                                        showQuestion={true}
+                                        canClickLinkProfile={true}
+                                    />
+                                </Card>
+                            );
+                        })}
+                        {answers ? (
+                            isAllAnswersDataAppear ? (
+                                <Text fontSize={13} textAlign="center">
+                                    Jawaban telah ditampilkan semua
+                                </Text>
+                            ) : (
+                                <Button
+                                    display="block"
+                                    margin="auto"
+                                    bgColor="primary.index"
+                                    _hover={{ bgColor: "primary.hover" }}
+                                    color="white"
+                                    fontSize={13}
+                                    onClick={() => handleLoadMoreAnswers(answersData, answersAwaitData)}
+                                >
+                                    Muat Jawaban Lainnya
+                                </Button>
+                            )
                         ) : (
-                            <Button
-                                display="block"
-                                margin="auto"
-                                bgColor="primary.index"
-                                _hover={{ bgColor: "primary.hover" }}
-                                color="white"
-                                fontSize={13}
-                                onClick={() => handleLoadMoreAnswers(answersData, answersAwaitData)}
-                            >
-                                Muat Jawaban Lainnya
-                            </Button>
-                        )
-                    ) : (
-                        ""
-                    )}
-                </Box>
-                <Box maxWidth={250} display={{ base: "none", lg: "block" }}>
-                    {questions?.questions.length > 1 && (
-                        <Box my={4}>
-                            <Heading as="h6" fontSize={16}>
-                                Daftar Pertanyaan
-                            </Heading>
-                            <UnorderedList m={0}>
-                                {questions?.questions.map((question, idx) => {
-                                    return (
-                                        <ListItem key={question.id} listStyleType="none" my={2}>
-                                            <Text fontSize={13}>
-                                                <Link to={`/question/${question.id}`} className="link-underline">
-                                                    {question.question}
-                                                </Link>
-                                            </Text>
-                                        </ListItem>
-                                    );
-                                })}
-                            </UnorderedList>
-                        </Box>
-                    )}
-                </Box>
-            </Flex>
+                            ""
+                        )}
+                    </Box>
+                    <Box maxWidth={250} display={{ base: "none", lg: "block" }}>
+                        {questions?.questions.length > 1 && (
+                            <Box my={4}>
+                                <Heading as="h6" fontSize={16}>
+                                    Daftar Pertanyaan
+                                </Heading>
+                                <UnorderedList m={0}>
+                                    {questions?.questions.map((question, idx) => {
+                                        return (
+                                            <ListItem key={question.id} listStyleType="none" my={2}>
+                                                <Text fontSize={13}>
+                                                    <Link to={`/question/${question.id}`} className="link-underline">
+                                                        {question.question}
+                                                    </Link>
+                                                </Text>
+                                            </ListItem>
+                                        );
+                                    })}
+                                </UnorderedList>
+                            </Box>
+                        )}
+                    </Box>
+                </Flex>
+            )}
         </Layout>
     );
 };
