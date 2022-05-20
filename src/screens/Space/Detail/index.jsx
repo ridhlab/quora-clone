@@ -16,7 +16,7 @@ import CollapseEdit from "../../../Components/FormEdit/CollapseEdit";
 import { useSelector } from "react-redux";
 
 // GraphQL
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import spaceQuery from "../../../GraphQL/space/query";
 import spaceMutation from "../../../GraphQL/space/mutation";
 
@@ -73,7 +73,10 @@ const SpaceDetail = () => {
 
     const [tabActive, setTabActive] = useState(pathname.split("/").pop());
 
-    const [getSpaceById, { data: spaceData }] = useLazyQuery(GET_SPACE_BY_ID, {
+    const { data: spaceData } = useQuery(GET_SPACE_BY_ID, {
+        variables: {
+            space_id: spaceId,
+        },
         onCompleted: (data) => {
             setSpace(data.spaces_by_pk);
             setValueNameEdit(data.spaces_by_pk.name);
@@ -182,11 +185,6 @@ const SpaceDetail = () => {
 
     useEffect(() => {
         checkPath();
-        getSpaceById({
-            variables: {
-                space_id: spaceId,
-            },
-        });
     }, []);
 
     return (

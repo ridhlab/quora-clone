@@ -16,7 +16,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import { useSelector } from "react-redux";
 
 // GraphQL
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import spaceQuery from "../../GraphQL/space/query";
 import spaceMutation from "../../GraphQL/space/mutation";
 
@@ -33,7 +33,7 @@ const Space = () => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const [getSpaces, { data: spaces }] = useLazyQuery(GET_SPACES);
+    const { data: spaces } = useQuery(GET_SPACES);
 
     const [addSpace] = useMutation(ADD_SPACE, {
         onCompleted: (data) => {
@@ -63,10 +63,6 @@ const Space = () => {
         setDescValue("");
         onClose();
     };
-
-    useEffect(() => {
-        getSpaces();
-    }, []);
 
     return (
         <Layout>

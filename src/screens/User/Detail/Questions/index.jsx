@@ -9,7 +9,7 @@ import Question from "../../../../Components/Question";
 import LineSeparator from "../../../../Components/LineSeparator";
 
 // GraphQL
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import questionQuery from "../../../../GraphQL/question/query";
 
 const UserQuestions = () => {
@@ -17,15 +17,11 @@ const UserQuestions = () => {
 
     const { GET_QUESTIONS_BY_USERNAME } = questionQuery;
 
-    const [getQuestionsByUsername, { data: questions, loading, error }] = useLazyQuery(GET_QUESTIONS_BY_USERNAME);
-
-    useEffect(() => {
-        getQuestionsByUsername({
-            variables: {
-                username,
-            },
-        });
-    }, []);
+    const { data: questions } = useQuery(GET_QUESTIONS_BY_USERNAME, {
+        variables: {
+            username,
+        },
+    });
 
     return (
         <Box>

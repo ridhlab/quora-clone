@@ -23,7 +23,7 @@ import answerMutation from "../../GraphQL/answer/mutation";
 import answerQuery from "../../GraphQL/answer/query";
 import { upvoteQuery, downvoteQuery } from "../../GraphQL/upvote-downvote/query";
 import { upvoteMutation, downvoteMutation } from "../../GraphQL/upvote-downvote/mutation";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
 // Library
 import Swal from "sweetalert2";
@@ -57,7 +57,10 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
 
     const { ADD_DOWNVOTE, DELETE_DOWNVOTE } = downvoteMutation;
 
-    const [getUpvoteByAnswerId] = useLazyQuery(GET_UPVOTE_BY_ANSWER_ID, {
+    useQuery(GET_UPVOTE_BY_ANSWER_ID, {
+        variables: {
+            answer_id: answerId,
+        },
         onCompleted: (data) => {
             const { upvote } = data;
             if (upvote.length !== 0) {
@@ -74,7 +77,10 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
         },
     });
 
-    const [getDownvoteByAnswerId] = useLazyQuery(GET_DOWNVOTE_BY_ANSWER_ID, {
+    useQuery(GET_DOWNVOTE_BY_ANSWER_ID, {
+        variables: {
+            answer_id: answerId,
+        },
         onCompleted: (data) => {
             const { downvote } = data;
             if (downvote.length !== 0) {
@@ -223,19 +229,6 @@ const Answer = React.memo(({ answerId, questionId, profilePicture, username, nam
             setIsDownvote(false);
         }
     }, [isLogin]);
-
-    useEffect(() => {
-        getUpvoteByAnswerId({
-            variables: {
-                answer_id: answerId,
-            },
-        });
-        getDownvoteByAnswerId({
-            variables: {
-                answer_id: answerId,
-            },
-        });
-    }, []);
 
     return (
         <>
